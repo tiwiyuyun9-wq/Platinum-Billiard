@@ -10,6 +10,11 @@ export function Footer() {
                     <p className="text-sm leading-relaxed text-zinc-500">
                         Destinasi utama bagi pecinta billiard yang mengutamakan kualitas, kenyamanan, dan privasi.
                     </p>
+                    <div className="text-sm text-zinc-500 space-y-1">
+                        <p>Sokanandi Timur SMP 5 (Perum Kalisemi Indah)</p>
+                        <p>Banjarnegara, Jawa Tengah 53413</p>
+                        <p className="pt-2 text-emerald-600 font-medium">0852-5748-7828</p>
+                    </div>
                 </div>
 
                 <div className="space-y-6">
