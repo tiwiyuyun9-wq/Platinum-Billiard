@@ -1,4 +1,4 @@
-export type MembershipTier = 'silver' | 'gold' | 'platinum';
+export type MembershipTier = 'standard' | 'silver' | 'gold' | 'platinum';
 
 export interface Membership {
     id: string;

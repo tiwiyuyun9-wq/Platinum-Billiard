@@ -4,12 +4,21 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 // import { getUserMembership } from "@/utils/supabase/membership"; // Don't import this, it has server code
-import { LogOut, CreditCard } from "lucide-react";
+import { Calendar, Clock, CreditCard, LogOut, Settings, User as UserIcon, Gift } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Membership } from "@/utils/supabase/membership-types";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { User } from "@supabase/supabase-js";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function Header() {
     // Client-side state for user & membership to avoid hydration mismatch
@@ -56,7 +65,14 @@ export function Header() {
         return () => subscription.unsubscribe();
     }, []);
 
+    const handleLogout = async () => {
+        const supabase = createClient();
+        await supabase.auth.signOut();
+        window.location.reload();
+    };
+
     const brandColors: Record<string, string> = {
+        standard: "bg-zinc-800 text-zinc-300 border-zinc-700",
         silver: "bg-zinc-300 text-zinc-900 border-zinc-400",
         gold: "bg-amber-400 text-amber-950 border-amber-500",
         platinum: "bg-zinc-100 text-zinc-950 border-white shadow-[0_0_10px_rgba(255,255,255,0.4)]",
@@ -105,24 +121,69 @@ export function Header() {
                     {/* Actions - Enterprise Buttons */}
                     <div className="flex items-center gap-4">
                         {user ? (
-                            <>
-                                {membership ? (
+                            <div className="flex items-center gap-3">
+                                {membership && (
                                     <Badge variant="outline" className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold uppercase text-[10px] tracking-wider ${brandColors[membership.tier] || "bg-zinc-800 text-zinc-300 border-zinc-700"}`}>
                                         <CreditCard className="w-3.5 h-3.5" />
                                         {membership.tier}
                                     </Badge>
-                                ) : (
-                                    <Button size="sm" variant="outline" className="hidden sm:flex border-zinc-700 hover:bg-zinc-800 text-zinc-300 rounded-full h-9 text-xs uppercase tracking-wide" asChild>
-                                        <Link href="/membership">Upgrade</Link>
-                                    </Button>
                                 )}
 
-                                <form action="/auth/signout" method="post">
-                                    <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white hover:bg-white/10 rounded-full w-9 h-9 transition-colors">
-                                        <LogOut className="w-4 h-4" />
-                                    </Button>
-                                </form>
-                            </>
+                                <DropdownMenu modal={false}>
+                                    <DropdownMenuTrigger asChild>
+                                        <div className="relative cursor-pointer">
+                                            <Avatar className="h-9 w-9 border border-zinc-700 transition-all hover:border-emerald-500/50">
+                                                <AvatarImage src={user.user_metadata?.avatar_url} />
+                                                <AvatarFallback className="bg-zinc-800 text-zinc-400 font-bold">
+                                                    {user.email?.charAt(0).toUpperCase()}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-zinc-950"></div>
+                                        </div>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end" className="w-56 bg-zinc-950 border-zinc-800 text-zinc-200">
+                                        <DropdownMenuLabel>
+                                            <div className="flex flex-col space-y-1">
+                                                <p className="text-sm font-medium leading-none text-white">{user.user_metadata?.full_name || "User"}</p>
+                                                <p className="text-xs leading-none text-zinc-500 truncate">{user.email}</p>
+                                            </div>
+                                        </DropdownMenuLabel>
+                                        <DropdownMenuSeparator className="bg-zinc-800" />
+                                        <DropdownMenuItem className="focus:bg-zinc-900 focus:text-white cursor-pointer group" asChild>
+                                            <Link href="/profile">
+                                                <UserIcon className="mr-2 h-4 w-4 text-zinc-500 group-hover:text-emerald-400" />
+                                                <span>Profile</span>
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem className="focus:bg-zinc-900 focus:text-white cursor-pointer group" asChild>
+                                            <Link href="/my-membership">
+                                                <CreditCard className="mr-2 h-4 w-4 text-zinc-500 group-hover:text-emerald-400" />
+                                                <span>Membership</span>
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem className="focus:bg-zinc-900 focus:text-white cursor-pointer group" asChild>
+                                            <Link href="/profile?tab=settings">
+                                                <Settings className="mr-2 h-4 w-4 text-zinc-500 group-hover:text-emerald-400" />
+                                                <span>Settings</span>
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem className="focus:bg-zinc-900 focus:text-white cursor-pointer group" asChild>
+                                            <Link href="/rewards">
+                                                <Gift className="mr-2 h-4 w-4 text-zinc-500 group-hover:text-amber-400" />
+                                                <span>Points & Rewards</span>
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuSeparator className="bg-zinc-800" />
+                                        <DropdownMenuItem
+                                            className="focus:bg-red-950/30 focus:text-red-400 text-red-400 cursor-pointer"
+                                            onClick={handleLogout}
+                                        >
+                                            <LogOut className="mr-2 h-4 w-4" />
+                                            <span>Log out</span>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
                         ) : (
                             <>
                                 <div className="hidden sm:flex items-center bg-zinc-900/50 rounded-full p-1 border border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.05)] backdrop-blur-sm">

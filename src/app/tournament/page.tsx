@@ -1,15 +1,12 @@
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Trophy, Calendar, Users, Star } from "lucide-react";
 
 export default function TournamentPage() {
     return (
         <main className="min-h-screen bg-zinc-950 text-white selection:bg-zinc-800 selection:text-white">
-            <Header />
 
             {/* Hero Section */}
-            <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+            <section className="relative pt-40 pb-20 md:pt-48 md:pb-32 overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-900/40 via-zinc-950/80 to-zinc-950 z-0" />
 
                 <div className="container relative z-10 px-4 md:px-6 text-center space-y-8">
@@ -54,8 +51,6 @@ export default function TournamentPage() {
                     </div>
                 </div>
             </section>
-
-            <Footer />
         </main>
     );
 }

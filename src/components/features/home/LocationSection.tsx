@@ -11,68 +11,83 @@ export function LocationSection() {
                     {/* Text Content */}
                     <div className="space-y-8">
                         <div>
-                            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-                                Find Us
+                            <div className="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-emerald-400 uppercase bg-emerald-950/30 rounded-full border border-emerald-900/50">
+                                Lokasi Kami
+                            </div>
+                            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-6">
+                                PLATINUM BILLIARD BANJARNEGARA
                             </h2>
                             <p className="text-zinc-400 text-lg leading-relaxed">
-                                Located in the heart of the city, Platinum Billiard offers easy access and ample parking.
-                                Whether you&apos;re dropping by for a quick game or booking a VIP room for the evening, we&apos;re ready to welcome you.
+                                Tempat billiard premium di Banjarnegara dengan fasilitas terbaik.
+                                Main santai atau kompetitif, kami siap menyambut Anda setiap hari.
                             </p>
                         </div>
 
                         <div className="space-y-6">
-                            <div className="flex items-start gap-4">
-                                <div className="mt-1 p-2 bg-zinc-900 rounded-lg border border-zinc-800">
+                            <div className="flex items-start gap-4 group">
+                                <div className="mt-1 p-3 bg-zinc-900 rounded-xl border border-zinc-800 group-hover:border-emerald-500/50 group-hover:bg-emerald-950/10 transition-colors">
                                     <MapPin className="w-6 h-6 text-emerald-500" />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-white text-lg">Location</h3>
-                                    <p className="text-zinc-400">
-                                        Jl. Jend. Sudirman No. 123, Jakarta Selatan<br />
-                                        (Sebelah Grand Mall)
+                                    <h3 className="font-bold text-white text-lg mb-1">Alamat</h3>
+                                    <p className="text-zinc-400 leading-relaxed">
+                                        Sokanandi Timur SMP 5 Banjarnegara<br />
+                                        Banjarnegara, Jawa Tengah
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-4">
-                                <div className="mt-1 p-2 bg-zinc-900 rounded-lg border border-zinc-800">
+                            <div className="flex items-start gap-4 group">
+                                <div className="mt-1 p-3 bg-zinc-900 rounded-xl border border-zinc-800 group-hover:border-emerald-500/50 group-hover:bg-emerald-950/10 transition-colors">
                                     <Clock className="w-6 h-6 text-emerald-500" />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-white text-lg">Operating Hours</h3>
-                                    <p className="text-zinc-400">
-                                        Mon - Sun: 10:00 AM - 02:00 AM
+                                    <h3 className="font-bold text-white text-lg mb-1">Jam Operasional</h3>
+                                    <p className="text-zinc-400 leading-relaxed">
+                                        Buka Setiap Hari: 11.00 - 02.00 WIB
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start gap-4 group">
+                                <div className="mt-1 p-3 bg-zinc-900 rounded-xl border border-zinc-800 group-hover:border-emerald-500/50 group-hover:bg-emerald-950/10 transition-colors">
+                                    <MessageCircle className="w-6 h-6 text-emerald-500" />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-white text-lg mb-1">Kontak / Reservasi</h3>
+                                    <p className="text-zinc-400 leading-relaxed">
+                                        0852-5748-7828 / 0813-3029-4557
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="pt-4">
+                        <div className="pt-6">
                             <Button
                                 size="lg"
-                                className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg px-8 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all hover:scale-[1.02]"
+                                className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl px-8 h-12 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                onClick={() => window.open('https://wa.me/6285257487828', '_blank')}
                             >
                                 <MessageCircle className="w-5 h-5 mr-2" />
-                                Contact via WhatsApp
+                                Hubungi via WhatsApp
                             </Button>
                         </div>
                     </div>
 
                     {/* Map Placeholder */}
-                    <div className="relative aspect-video lg:aspect-square bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl">
-                        {/* Replace with actual Google Maps Embed if available */}
-                        <div className="absolute inset-0 flex items-center justify-center bg-zinc-800/50">
-                            <span className="text-zinc-500 font-medium">Google Maps Embed Placeholder</span>
-                        </div>
+                    <div className="relative aspect-video lg:aspect-square bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl group">
+                        {/* Map Overlay Gradient */}
+                        <div className="absolute inset-0 pointer-events-none z-10 border border-white/5 rounded-2xl"></div>
+
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126920.28317373805!2d106.75628551465225!3d-6.229720935372373!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e945e34b9d%3A0x5371bf0fdad786a2!2sJakarta%2C%20Special%20Capital%20Region%20of%20Jakarta!5e0!3m2!1sen!2sid!4v1647844002672!5m2!1sen!2sid"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15830.435742232497!2d109.6886!3d-7.4086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7aa96319853361%3A0x6336338e55e3489!2sSMP%20Negeri%205%20Banjarnegara!5e0!3m2!1sid!2sid!4v1684307328000!5m2!1sid!2sid"
                             width="100%"
                             height="100%"
                             style={{ border: 0 }}
                             allowFullScreen={true}
                             loading="lazy"
-                            title="Platinum Billiard Location"
-                            className="grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                            title="Lokasi Platinum Billiard Banjarnegara"
+                            className="grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 ease-in-out"
                         ></iframe>
                     </div>
 

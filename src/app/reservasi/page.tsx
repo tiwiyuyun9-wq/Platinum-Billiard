@@ -4,6 +4,7 @@ import { useState } from "react";
 import { TableCard } from "@/components/features/tables/TableCard";
 import { Info } from "lucide-react";
 import { BookingModal } from "@/components/features/booking/BookingModal";
+import { LiveTableMap } from "@/components/features/map/LiveTableMap";
 
 // Mock Data - Adjusted to Night Rates (Standard)
 const MOCK_TABLES = [
@@ -32,7 +33,7 @@ export default function ReservationPage() {
     };
 
     return (
-        <main className="min-h-screen bg-zinc-950 text-zinc-50 pt-24 pb-20">
+        <main className="min-h-screen bg-zinc-950 text-zinc-50 pt-40 pb-20">
             <div className="container mx-auto px-4 space-y-8">
                 <div className="text-center space-y-6">
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
@@ -81,6 +82,10 @@ export default function ReservationPage() {
                     <button className="px-6 py-2 rounded-full border border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300 transition-all text-sm font-medium">
                         Status Tersedia
                     </button>
+                </div>
+
+                <div className="mb-12">
+                    <LiveTableMap />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

@@ -1,19 +1,21 @@
 "use strict";
 import Image from "next/image";
 
+import { getStorageUrl } from "@/utils/supabase/storage";
+
 const VIBE_IMAGES = [
     {
-        src: "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?q=80&w=2071&auto=format&fit=crop",
+        src: getStorageUrl("vibe/Rasson%20Premium.webp"),
         alt: "Professional Billiard Table",
         className: "col-span-12 md:col-span-8 row-span-2",
     },
     {
-        src: "https://images.unsplash.com/photo-1563220054-04d2b2707255?q=80&w=2000&auto=format&fit=crop",
+        src: getStorageUrl("vibe/bar%20and%20lounge.jpg"),
         alt: "Bar & Lounge Area",
         className: "col-span-12 md:col-span-4 row-span-1",
     },
     {
-        src: "https://images.unsplash.com/photo-1628173005527-dc599503487c?q=80&w=2000&auto=format&fit=crop",
+        src: getStorageUrl("vibe/ambience.jpeg"),
         alt: "Premium Ambience",
         className: "col-span-12 md:col-span-4 row-span-1",
     },
@@ -28,10 +30,10 @@ export function VibeGallery() {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="max-w-3xl mx-auto text-center mb-16">
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400 mb-4">
-                        The Platinum Vibe
+                        Atmosfer Platinum
                     </h2>
                     <p className="text-zinc-400 text-lg">
-                        Experience the sophisticated atmosphere designed for serious players and social gatherings alike.
+                        Rasakan suasana berkelas yang dirancang untuk pemain serius maupun sekadar bersantai.
                     </p>
                 </div>
 

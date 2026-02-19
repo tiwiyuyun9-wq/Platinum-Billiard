@@ -58,8 +58,28 @@ export async function createBooking(formData: FormData) {
     // Calculate Price
     const totalPrice = calculatePrice(tableType, startDateTime, duration);
 
+    // Check Availability (Overlapping Bookings)
+    // A booking overlaps if: (StartA < EndB) AND (EndA > StartB)
+    const { data: existingBookings, error: conflictError } = await supabase
+        .from('bookings')
+        .select('id')
+        .eq('table_id', tableId)
+        .neq('status', 'cancelled')
+        .neq('status', 'rejected')
+        .lt('start_time', endDateTime.toISOString())
+        .gt('end_time', startDateTime.toISOString());
+
+    if (conflictError) {
+        console.error("Availability Check Error:", conflictError);
+        return { error: "Failed to check availability." };
+    }
+
+    if (existingBookings && existingBookings.length > 0) {
+        return { error: "Meja ini sudah di-booking pada jam tersebut. Silakan pilih jam lain." };
+    }
+
     // Insert into DB
-    const { error } = await supabase.from('bookings').insert({
+    const { data, error } = await supabase.from('bookings').insert({
         user_id: user.id,
         table_id: tableId,
         start_time: startDateTime.toISOString(),
@@ -67,7 +87,7 @@ export async function createBooking(formData: FormData) {
         duration_hours: duration,
         total_price: totalPrice,
         status: 'pending_payment'
-    });
+    }).select().single();
 
     if (error) {
         console.error("Booking Error:", error);
@@ -75,7 +95,22 @@ export async function createBooking(formData: FormData) {
     }
 
     revalidatePath('/reservasi');
-    // Redirect to a success/payment page (or just showing a success message)
-    // For now, we'll redirect back with a success flag
-    return { success: true, message: "Booking Created!" };
+    return { success: true, message: "Booking Berhasil! Silakan lanjut ke pembayaran.", booking: data };
+}
+
+export async function confirmPayment(bookingId: string) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from('bookings')
+        .update({ status: 'waiting_confirmation' })
+        .eq('id', bookingId);
+
+    if (error) {
+        console.error("Payment Confirmation Error:", error);
+        return { error: "Gagal mengkonfirmasi pembayaran." };
+    }
+
+    revalidatePath('/reservasi');
+    return { success: true };
 }
