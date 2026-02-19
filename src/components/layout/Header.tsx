@@ -1,85 +1,158 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/server";
-import { getUserMembership } from "@/utils/supabase/membership";
+import { createClient } from "@/utils/supabase/client";
+// import { getUserMembership } from "@/utils/supabase/membership"; // Don't import this, it has server code
 import { User, LogOut, CreditCard } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from "react";
+import { Membership } from "@/utils/supabase/membership-types";
+import { AuthModal } from "@/components/auth/AuthModal";
 
-export async function Header() {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    const membership = user ? await getUserMembership(user.id) : null;
+export function Header() {
+    // Client-side state for user & membership to avoid hydration mismatch
+    const [user, setUser] = useState<any>(null);
+    const [membership, setMembership] = useState<Membership | null>(null);
+    const [authOpen, setAuthOpen] = useState(false);
+    const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
-    const brandColors = {
+    useEffect(() => {
+        const supabase = createClient();
+
+        const fetchUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUser(user);
+            fetchMembership(user?.id);
+        };
+
+        const fetchMembership = async (userId: string | undefined) => {
+            if (!userId) {
+                setMembership(null);
+                return;
+            }
+            const { data } = await supabase
+                .from("memberships")
+                .select("*")
+                .eq("user_id", userId)
+                .eq("is_active", true)
+                .order("end_date", { ascending: false })
+                .limit(1)
+                .single();
+
+            if (data) {
+                setMembership(data as Membership);
+            }
+        };
+
+        fetchUser();
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+            fetchMembership(session?.user?.id);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
+    const brandColors: Record<string, string> = {
         silver: "bg-zinc-300 text-zinc-900 border-zinc-400",
         gold: "bg-amber-400 text-amber-950 border-amber-500",
         platinum: "bg-zinc-100 text-zinc-950 border-white shadow-[0_0_10px_rgba(255,255,255,0.4)]",
     };
 
     return (
-        <header className="fixed top-0 z-50 w-full pt-4 px-4">
+        <header className="fixed top-0 z-50 w-full pt-6 px-4">
             <div className="container mx-auto">
-                <div className="mx-auto w-full max-w-5xl rounded-full border border-zinc-800 bg-zinc-950/70 shadow-[0_4px_30px_rgba(0,0,0,0.5)] backdrop-blur-md supports-[backdrop-filter]:bg-zinc-950/40 px-6 h-16 flex items-center justify-between transition-all duration-300 hover:border-zinc-700/50 hover:bg-zinc-950/80">
+                <div className="mx-auto w-full max-w-7xl rounded-full border border-white/10 bg-zinc-950/70 shadow-[0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-xl supports-[backdrop-filter]:bg-zinc-950/30 px-6 h-20 flex items-center justify-between transition-all duration-500 hover:border-white/20 hover:bg-zinc-950/80 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]">
 
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center space-x-2 shrink-0">
-                        <div className="bg-gradient-to-br from-zinc-100 to-zinc-500 w-8 h-8 rounded-lg flex items-center justify-center shadow-lg shadow-zinc-500/20">
-                            <span className="text-zinc-950 font-bold text-lg leading-none pt-0.5">P</span>
+                    {/* Logo - Refined */}
+                    <Link href="/" className="flex items-center space-x-3 shrink-0 group">
+                        <div className="bg-gradient-to-br from-zinc-100 to-zinc-600 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-zinc-500/10 transition-transform group-hover:scale-105 group-hover:shadow-zinc-500/20">
+                            <span className="text-zinc-950 font-extrabold text-xl leading-none pt-0.5 font-serif">P</span>
                         </div>
-                        <span className="hidden sm:inline-block text-lg font-bold bg-gradient-to-r from-zinc-100 via-zinc-400 to-zinc-100 bg-clip-text text-transparent tracking-tight">
-                            Platinum Billiard
-                        </span>
+                        <div className="flex flex-col">
+                            <span className="hidden sm:inline-block text-lg font-bold bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent tracking-tight leading-none">
+                                Platinum
+                            </span>
+                            <span className="hidden sm:inline-block text-[10px] tracking-[0.2em] text-zinc-500 uppercase font-semibold">
+                                Billiard
+                            </span>
+                        </div>
                     </Link>
 
-                    {/* Navigation */}
-                    <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-                        <Link href="/" className="hover:text-zinc-100 transition-colors relative group">
+                    {/* Navigation - Polished */}
+                    <nav className="hidden md:flex items-center gap-10 text-sm font-medium text-zinc-400">
+                        <Link href="/" className="hover:text-white transition-colors relative group py-2">
                             Home
-                            <span className="absolute -bottom-1 left-1/2 w-0 h-[2px] bg-zinc-100 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+                            <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full group-hover:left-0 opacity-0 group-hover:opacity-100"></span>
                         </Link>
-                        <Link href="/reservasi" className="hover:text-zinc-100 transition-colors relative group">
+                        <Link href="/reservasi" className="hover:text-white transition-colors relative group py-2">
                             Booking
-                            <span className="absolute -bottom-1 left-1/2 w-0 h-[2px] bg-zinc-100 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+                            <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full group-hover:left-0 opacity-0 group-hover:opacity-100"></span>
                         </Link>
-                        <Link href="/membership" className="hover:text-zinc-100 transition-colors relative group">
+                        <Link href="/membership" className="hover:text-white transition-colors relative group py-2">
                             Membership
-                            <span className="absolute -bottom-1 left-1/2 w-0 h-[2px] bg-zinc-100 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+                            <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full group-hover:left-0 opacity-0 group-hover:opacity-100"></span>
                         </Link>
-
+                        <Link href="/tournament" className="hover:text-white transition-colors relative group py-2">
+                            Tournament
+                            <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full group-hover:left-0 opacity-0 group-hover:opacity-100"></span>
+                        </Link>
                     </nav>
 
-                    {/* Actions */}
-                    <div className="flex items-center gap-3">
+                    {/* Actions - Enterprise Buttons */}
+                    <div className="flex items-center gap-4">
                         {user ? (
                             <>
                                 {membership ? (
-                                    <Badge variant="outline" className={`hidden sm:flex items-center gap-1 px-3 py-1 rounded-full font-bold uppercase text-[10px] tracking-wider ${brandColors[membership.tier] || "bg-zinc-800 text-zinc-300 border-zinc-700"}`}>
-                                        <CreditCard className="w-3 h-3" />
+                                    <Badge variant="outline" className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold uppercase text-[10px] tracking-wider ${brandColors[membership.tier] || "bg-zinc-800 text-zinc-300 border-zinc-700"}`}>
+                                        <CreditCard className="w-3.5 h-3.5" />
                                         {membership.tier}
                                     </Badge>
                                 ) : (
-                                    <Button size="sm" variant="outline" className="hidden sm:flex border-zinc-700 hover:bg-zinc-800 text-zinc-300 rounded-full h-8 text-xs" asChild>
+                                    <Button size="sm" variant="outline" className="hidden sm:flex border-zinc-700 hover:bg-zinc-800 text-zinc-300 rounded-full h-9 text-xs uppercase tracking-wide" asChild>
                                         <Link href="/membership">Upgrade</Link>
                                     </Button>
                                 )}
 
                                 <form action="/auth/signout" method="post">
-                                    <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white hover:bg-white/10 rounded-full w-8 h-8">
+                                    <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white hover:bg-white/10 rounded-full w-9 h-9 transition-colors">
                                         <LogOut className="w-4 h-4" />
                                     </Button>
                                 </form>
                             </>
                         ) : (
                             <>
-                                <Button variant="ghost" size="sm" className="hidden sm:flex text-zinc-400 hover:text-white hover:bg-white/5 rounded-full px-4" asChild>
-                                    <Link href="/login">Masuk</Link>
-                                </Button>
-                                <Button size="sm" className="bg-zinc-100 hover:bg-white text-zinc-950 font-bold rounded-full px-5 shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform hover:scale-105" asChild>
-                                    <Link href="/register">Join Member</Link>
-                                </Button>
+                                <div className="hidden sm:flex items-center bg-zinc-900/50 rounded-full p-1 border border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.05)] backdrop-blur-sm">
+                                    <button
+                                        onClick={() => {
+                                            setAuthMode("login");
+                                            setAuthOpen(true);
+                                        }}
+                                        className="px-6 py-2 text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-all rounded-full"
+                                    >
+                                        Masuk
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setAuthMode("register");
+                                            setAuthOpen(true);
+                                        }}
+                                        className="px-6 py-2 text-sm font-bold text-zinc-950 bg-gradient-to-tr from-white to-zinc-200 hover:to-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all scale-105"
+                                    >
+                                        Daftar
+                                    </button>
+                                </div>
                             </>
                         )}
                     </div>
+
+                    <AuthModal
+                        open={authOpen}
+                        onOpenChange={setAuthOpen}
+                        defaultMode={authMode}
+                    />
 
                 </div>
             </div>

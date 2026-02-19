@@ -1,15 +1,5 @@
 import { createClient } from "./server";
-
-export type MembershipTier = 'silver' | 'gold' | 'platinum';
-
-export interface Membership {
-    id: string;
-    user_id: string;
-    tier: MembershipTier;
-    start_date: string;
-    end_date: string;
-    is_active: boolean;
-}
+import { Membership } from "./membership-types";
 
 export async function getUserMembership(userId: string): Promise<Membership | null> {
     const supabase = await createClient();
