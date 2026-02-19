@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { TableCard } from "@/components/features/tables/TableCard"; // Reusing card or creating a pin
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
@@ -22,9 +21,9 @@ interface Table {
 export function LiveTableMap() {
     const [tables, setTables] = useState<Table[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const supabase = createClient();
-
     useEffect(() => {
+        const supabase = createClient();
+
         // Initial Fetch
         const fetchTables = async () => {
             const { data } = await supabase.from("tables").select("*").order("id");

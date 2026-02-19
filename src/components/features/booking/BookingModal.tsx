@@ -10,10 +10,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { createBooking, confirmPayment } from "@/app/reservasi/actions";
-import { CalendarIcon, Clock, CreditCard, CheckCircle, Upload } from "lucide-react";
+import { CalendarIcon, Clock, CheckCircle, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import Image from "next/image";
 
 interface BookingModalProps {
     isOpen: boolean;
@@ -31,10 +30,6 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
 
     const [bookingId, setBookingId] = useState<string | null>(null);
 
-    // Placeholder for payment proof (not actually uploading in this step for simplicity of v1)
-    // Real implementation would upload file to storage bucket first
-    const [paymentProof, setPaymentProof] = useState<File | null>(null);
-
     if (!table) return null;
 
     const isRasson = table.name.toLowerCase().includes('rasson');
@@ -45,7 +40,6 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
         setStep('details');
         setError(null);
         setBookingId(null);
-        setPaymentProof(null);
         onClose();
     }
 

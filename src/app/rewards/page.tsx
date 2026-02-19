@@ -1,11 +1,11 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Gift, Coins, History, ArrowUpRight, ArrowDownLeft } from "lucide-react";
-import Link from "next/link";
+import { Gift, Coins, History } from "lucide-react";
 import { PointsInfoModal } from "@/components/features/rewards/PointsInfoModal";
+import Image from "next/image";
 
 // Mock Rewards Catalog
 const REWARDS_CATALOG = [
@@ -108,7 +108,13 @@ export default async function RewardsPage() {
                             {REWARDS_CATALOG.map((item) => (
                                 <Card key={item.id} className="bg-zinc-900/50 border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all group">
                                     <div className="aspect-video relative overflow-hidden">
-                                        <img src={item.image} alt={item.title} className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-500" />
+                                        <Image
+                                            src={item.image}
+                                            alt={item.title}
+                                            fill
+                                            className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                                            unoptimized
+                                        />
                                         <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-2 py-1 rounded-md text-xs font-bold text-amber-400 flex items-center gap-1">
                                             <Coins className="w-3 h-3" />
                                             {item.points} Poin
