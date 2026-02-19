@@ -46,7 +46,7 @@ export default function UsersPage() {
             if (error) {
                 console.error("Error fetching users:", error);
             } else if (data) {
-                setUsers(data as any);
+                setUsers(data as User[]);
             }
             setIsLoading(false);
         };

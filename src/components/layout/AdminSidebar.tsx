@@ -8,7 +8,6 @@ import {
     Armchair,
     CreditCard,
     BarChart3,
-    Settings,
     LogOut,
     Users
 } from "lucide-react";

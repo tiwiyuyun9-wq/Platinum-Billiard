@@ -102,7 +102,7 @@ export default function ReportsPage() {
                                     <Tooltip
                                         contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', color: '#fff' }}
                                         itemStyle={{ color: '#fff' }}
-                                        formatter={(value: any) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value)}
+                                        formatter={(value: number | undefined) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value || 0)}
                                     />
                                     <Bar dataKey="total" fill="#10b981" radius={[4, 4, 0, 0]} />
                                 </BarChart>

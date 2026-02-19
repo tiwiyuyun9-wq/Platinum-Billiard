@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ export default function PaymentVerificationPage() {
     const [isLoading, setIsLoading] = useState(true);
     const supabase = createClient();
 
-    const fetchPendingBookings = async () => {
+    const fetchPendingBookings = useCallback(async () => {
         const { data, error } = await supabase
             .from("bookings")
             .select(`
@@ -56,11 +56,11 @@ export default function PaymentVerificationPage() {
             setBookings(bookingsWithProfile as Booking[]);
         }
         setIsLoading(false);
-    };
+    }, [supabase]);
 
     useEffect(() => {
         fetchPendingBookings();
-    }, [supabase]);
+    }, [fetchPendingBookings]);
 
     const handleAction = async (bookingId: string, action: "approve" | "reject") => {
         const newStatus = action === "approve" ? "confirmed" : "rejected";
