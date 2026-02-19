@@ -1,0 +1,205 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import {
+    DndContext,
+    DragOverlay,
+    closestCorners,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    DragStartEvent,
+    DragOverEvent,
+    DragEndEvent,
+} from "@dnd-kit/core";
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { TableCardDraggable } from "@/components/features/admin/tables/TableCardDraggable";
+import { ColumnDroppable } from "@/components/features/admin/tables/ColumnDroppable";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+
+type TableStatus = "available" | "occupied" | "booked" | "maintenance";
+
+interface Table {
+    id: string;
+    name: string;
+    status: TableStatus;
+    type: string;
+}
+
+const COLUMNS: { id: TableStatus; title: string }[] = [
+    { id: "available", title: "Available" },
+    { id: "booked", title: "Booked / Reserved" },
+    { id: "occupied", title: "Occupied (Playing)" },
+    { id: "maintenance", title: "Maintenance" },
+];
+
+export default function TableManagementPage() {
+    const [tables, setTables] = useState<Table[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [activeId, setActiveId] = useState<string | null>(null);
+    const supabase = createClient();
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    useEffect(() => {
+        fetchTables();
+
+        // Realtime subscription
+        const channel = supabase
+            .channel("admin-tables")
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "tables" },
+                (payload) => {
+                    if (payload.eventType === "UPDATE") {
+                        setTables((prev) =>
+                            prev.map((t) => (t.id === payload.new.id ? (payload.new as Table) : t))
+                        );
+                    } else if (payload.eventType === "INSERT") {
+                        setTables((prev) => [...prev, payload.new as Table]);
+                    }
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, []);
+
+    const fetchTables = async () => {
+        const { data, error } = await supabase.from("tables").select("*").order("name");
+        if (error) {
+            toast.error("Gagal memuat data meja");
+            return;
+        }
+        setTables(data as Table[]);
+        setIsLoading(false);
+    };
+
+    const handleDragStart = (event: DragStartEvent) => {
+        setActiveId(event.active.id as string);
+    };
+
+    const handleDragOver = (event: DragOverEvent) => {
+        const { active, over } = event;
+        if (!over) return;
+
+        const activeId = active.id;
+        const overId = over.id;
+
+        // Find the containers
+        const activeTable = tables.find((t) => t.id === activeId);
+
+        if (!activeTable) return;
+
+        // Over a column?
+        const overColumn = COLUMNS.find(c => c.id === overId);
+        if (overColumn && activeTable.status !== overColumn.id) {
+            // We'll handle the optimistic update in DragEnd usually or here for visuals
+            // For simplicity in this V1, let's just allow dropping on column or other items
+        }
+    };
+
+    const handleDragEnd = async (event: DragEndEvent) => {
+        const { active, over } = event;
+        setActiveId(null);
+
+        if (!over) return;
+
+        const activeId = active.id as string;
+        const overId = over.id as string;
+
+        const activeTable = tables.find((t) => t.id === activeId);
+        if (!activeTable) return;
+
+        let newStatus: TableStatus | null = null;
+
+        // Dropped over a column directly
+        if (COLUMNS.some((c) => c.id === overId)) {
+            newStatus = overId as TableStatus;
+        }
+        // Dropped over another table? Find its status
+        else {
+            const overTable = tables.find((t) => t.id === overId);
+            if (overTable) {
+                newStatus = overTable.status;
+            }
+        }
+
+        if (newStatus && newStatus !== activeTable.status) {
+            // Optimistic Update
+            setTables((prev) =>
+                prev.map((t) =>
+                    t.id === activeId ? { ...t, status: newStatus! } : t
+                )
+            );
+
+            // Supabase Update
+            const { error } = await supabase
+                .from("tables")
+                .update({ status: newStatus })
+                .eq("id", activeId);
+
+            if (error) {
+                toast.error("Gagal update status meja");
+                // Revert
+                fetchTables();
+            } else {
+                toast.success(`Meja dipindah ke ${newStatus}`);
+            }
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div className="flex h-96 items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-6">
+            <h1 className="text-2xl font-bold text-white">Manajemen Status Meja</h1>
+
+            <DndContext
+                sensors={sensors}
+                collisionDetection={closestCorners}
+                onDragStart={handleDragStart}
+                onDragOver={handleDragOver}
+                onDragEnd={handleDragEnd}
+            >
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {COLUMNS.map((col) => (
+                        <ColumnDroppable
+                            key={col.id}
+                            id={col.id}
+                            title={col.title}
+                            tables={tables.filter((t) => t.status === col.id)}
+                        />
+                    ))}
+                </div>
+
+                <DragOverlay>
+                    {activeId ? (
+                        <TableCardDraggable table={tables.find((t) => t.id === activeId)!} overlay />
+                    ) : null}
+                </DragOverlay>
+            </DndContext>
+        </div>
+    );
+}
