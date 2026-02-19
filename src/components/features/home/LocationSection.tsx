@@ -16,7 +16,7 @@ export function LocationSection() {
                             </h2>
                             <p className="text-zinc-400 text-lg leading-relaxed">
                                 Located in the heart of the city, Platinum Billiard offers easy access and ample parking.
-                                Whether you're dropping by for a quick game or booking a VIP room for the evening, we're ready to welcome you.
+                                Whether you&apos;re dropping by for a quick game or booking a VIP room for the evening, we&apos;re ready to welcome you.
                             </p>
                         </div>
 

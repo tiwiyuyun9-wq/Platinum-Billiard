@@ -4,15 +4,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 // import { getUserMembership } from "@/utils/supabase/membership"; // Don't import this, it has server code
-import { User, LogOut, CreditCard } from "lucide-react";
+import { User as UserIcon, LogOut, CreditCard } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Membership } from "@/utils/supabase/membership-types";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { User } from "@supabase/supabase-js";
 
 export function Header() {
     // Client-side state for user & membership to avoid hydration mismatch
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [membership, setMembership] = useState<Membership | null>(null);
     const [authOpen, setAuthOpen] = useState(false);
     const [authMode, setAuthMode] = useState<"login" | "register">("login");
