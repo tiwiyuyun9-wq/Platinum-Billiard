@@ -152,7 +152,7 @@ export default async function MembershipPage() {
                                 )}
                                 <div className={isCurrentPlan ? "pointer-events-none" : ""}>
                                     <MembershipCard
-                                        tier={tier.tier as any}
+                                        tier={tier.tier}
                                         price={tier.price}
                                         period={tier.period}
                                         benefits={[...tier.benefits]}

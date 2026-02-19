@@ -4,9 +4,21 @@ import { cn } from "@/lib/utils";
 import { Loader2, Wifi } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { User } from "@supabase/supabase-js";
+
+interface Membership {
+    tier: string;
+    end_date: string;
+    is_active: boolean;
+    start_date?: string;
+    user_id?: string;
+    id?: string;
+    created_at?: string;
+}
+
 interface DigitalMemberCardProps {
-    user: any;
-    membership: any;
+    user: User | null;
+    membership: Membership | null;
     loading?: boolean;
 }
 

@@ -11,8 +11,10 @@ import { toast } from "sonner"
 import { Loader2, Upload } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
+import { User } from "@supabase/supabase-js"
+
 interface ProfileFormProps {
-    user: any
+    user: User
 }
 
 export function ProfileForm({ user }: ProfileFormProps) {
@@ -45,8 +47,8 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
             setAvatarUrl(publicUrl)
             toast.success("Avatar uploaded successfully!")
-        } catch (error: any) {
-            toast.error("Error uploading avatar: " + error.message)
+        } catch (error) {
+            toast.error("Error uploading avatar: " + (error as Error).message)
         } finally {
             setIsLoading(false)
         }
