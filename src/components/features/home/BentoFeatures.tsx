@@ -1,5 +1,5 @@
 "use strict";
-import { Tv, Wind, Sofa, Utensils } from "lucide-react";
+import { Tv, Sofa, Utensils } from "lucide-react";
 
 const FEATURES = [
     {

@@ -2,7 +2,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Trophy, Calendar, Users, Star } from "lucide-react";
-import Link from "next/link";
 
 export default function TournamentPage() {
     return (

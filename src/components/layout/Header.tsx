@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 // import { getUserMembership } from "@/utils/supabase/membership"; // Don't import this, it has server code
-import { User as UserIcon, LogOut, CreditCard } from "lucide-react";
+import { LogOut, CreditCard } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Membership } from "@/utils/supabase/membership-types";

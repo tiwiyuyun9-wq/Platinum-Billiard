@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import Image from "next/image";
 import { getStorageUrl } from "@/utils/supabase/storage";
 import { motion } from "framer-motion";
@@ -64,13 +62,13 @@ export function HeroSection() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                         className={`inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium backdrop-blur-xl ${status.isOpen
-                                ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
-                                : "border-zinc-500/20 bg-zinc-500/10 text-zinc-400"
+                            ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+                            : "border-zinc-500/20 bg-zinc-500/10 text-zinc-400"
                             }`}
                     >
                         <span className={`flex h-2 w-2 rounded-full mr-2 ${status.isOpen
-                                ? "bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]"
-                                : "bg-zinc-500"
+                            ? "bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]"
+                            : "bg-zinc-500"
                             }`}></span>
                         {status.text}
                     </motion.div>
