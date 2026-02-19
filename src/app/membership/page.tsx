@@ -1,10 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { MembershipCard } from "@/components/features/membership/MembershipCard";
-import { Badge } from "@/components/ui/badge";
-import { Check, Crown, Star, Shield } from "lucide-react";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Crown, Star, Shield } from "lucide-react";
 
 const MEMBERSHIP_TIERS = [
     {

@@ -4,7 +4,7 @@ import { DigitalMemberCard } from "@/components/features/membership/DigitalMembe
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, Clock, History, Star, Zap } from "lucide-react";
+import { ArrowRight, History, Star, Zap } from "lucide-react";
 import Link from "next/link";
 
 export default async function MyMembershipPage() {
