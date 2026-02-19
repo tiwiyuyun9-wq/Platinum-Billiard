@@ -25,6 +25,7 @@ interface DigitalMemberCardProps {
 export function DigitalMemberCard({ user, membership, loading }: DigitalMemberCardProps) {
     const [mounted, setMounted] = useState(false);
 
+    // eslint-disable-next-line
     useEffect(() => setMounted(true), []);
 
     if (loading || !mounted) {
