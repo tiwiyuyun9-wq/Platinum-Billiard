@@ -59,10 +59,20 @@ export function MembershipCard({ tier, price, period, benefits, recommended, onB
             recommended && !disabled ? "shadow-[0_0_40px_rgba(245,158,11,0.15)] scale-105 z-10" : "hover:border-zinc-500 hover:shadow-lg",
             disabled && "opacity-75 grayscale-[0.5]"
         )}>
-            {/* ... best value ... */}
+            {recommended && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-1 rounded-full text-xs font-bold tracking-wider shadow-lg uppercase">
+                    Best Value
+                </div>
+            )}
 
             <div className="mb-8 text-center">
-                {/* ... header ... */}
+                <h3 className={cn("text-2xl font-bold mb-2 tracking-tight", styles.textColor)}>
+                    {tier}
+                </h3>
+                <div className="flex items-baseline justify-center gap-1">
+                    <span className="text-4xl font-extrabold text-white tracking-tight">{price}</span>
+                    <span className="text-zinc-500 text-sm font-medium">/{period}</span>
+                </div>
             </div>
 
             <ul className="space-y-4 mb-8 flex-1">

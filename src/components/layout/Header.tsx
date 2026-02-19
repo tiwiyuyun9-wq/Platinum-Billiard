@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 // import { getUserMembership } from "@/utils/supabase/membership"; // Don't import this, it has server code
-import { Calendar, Clock, CreditCard, LogOut, Settings, User as UserIcon, Gift } from "lucide-react";
+import { CreditCard, LogOut, Settings, User as UserIcon, Gift } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Membership } from "@/utils/supabase/membership-types";

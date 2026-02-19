@@ -26,7 +26,7 @@ export function DigitalMemberCard({ user, membership, loading }: DigitalMemberCa
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
 
-    if (loading) {
+    if (loading || !mounted) {
         return (
             <div className="w-full max-w-sm aspect-[1.586/1] rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
                 <Loader2 className="w-8 h-8 text-zinc-500 animate-spin" />
