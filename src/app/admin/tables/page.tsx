@@ -42,7 +42,7 @@ export default function TableManagementPage() {
     const [tables, setTables] = useState<Table[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [activeId, setActiveId] = useState<string | null>(null);
-    const supabase = createClient();
+    const [supabase] = useState(() => createClient());
 
     const sensors = useSensors(
         useSensor(PointerSensor),

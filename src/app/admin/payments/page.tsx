@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,38 +29,38 @@ export default function PaymentVerificationPage() {
     const [isLoading, setIsLoading] = useState(true);
     const supabase = createClient();
 
-    const fetchPendingBookings = useCallback(async () => {
-        const { data, error } = await supabase
-            .from("bookings")
-            .select(`
-                *,
-                tables (name)
-            `)
-            .eq("status", "waiting_confirmation")
-            .order("created_at", { ascending: true });
-
-        if (error) {
-            console.error(error);
-            toast.error("Gagal memuat data booking");
-        } else {
-            // Fetch user profiles separately if needed or via join if relation exists
-            // Assuming bookings has user_id, we can fetch profiles
-            const userIds = data.map(b => b.user_id);
-            const { data: profiles } = await supabase.from("profiles").select("id, full_name, email").in("id", userIds);
-
-            const bookingsWithProfile = data.map(b => ({
-                ...b,
-                profiles: profiles?.find(p => p.id === b.user_id)
-            }));
-
-            setBookings(bookingsWithProfile as Booking[]);
-        }
-        setIsLoading(false);
-    }, [supabase]);
-
     useEffect(() => {
+        const fetchPendingBookings = async () => {
+            const { data, error } = await supabase
+                .from("bookings")
+                .select(`
+                    *,
+                    tables (name)
+                `)
+                .eq("status", "waiting_confirmation")
+                .order("created_at", { ascending: true });
+
+            if (error) {
+                console.error(error);
+                toast.error("Gagal memuat data booking");
+            } else {
+                // Fetch user profiles separately if needed or via join if relation exists
+                // Assuming bookings has user_id, we can fetch profiles
+                const userIds = data.map(b => b.user_id);
+                const { data: profiles } = await supabase.from("profiles").select("id, full_name, email").in("id", userIds);
+
+                const bookingsWithProfile = data.map(b => ({
+                    ...b,
+                    profiles: profiles?.find(p => p.id === b.user_id)
+                }));
+
+                setBookings(bookingsWithProfile as Booking[]);
+            }
+            setIsLoading(false);
+        };
+
         fetchPendingBookings();
-    }, [fetchPendingBookings]);
+    }, [supabase]);
 
     const handleAction = async (bookingId: string, action: "approve" | "reject") => {
         const newStatus = action === "approve" ? "confirmed" : "rejected";
