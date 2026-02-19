@@ -15,8 +15,17 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
+interface User {
+    id: string;
+    full_name: string;
+    email: string;
+    role: string;
+    avatar_url: string;
+    memberships?: { tier: string; is_active: boolean }[];
+}
+
 export default function UsersPage() {
-    const [users, setUsers] = useState<any[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState("");
     const supabase = createClient();
@@ -34,12 +43,16 @@ export default function UsersPage() {
                 .order("created_at", { ascending: false })
                 .limit(50);
 
-            if (data) setUsers(data);
+            if (error) {
+                console.error("Error fetching users:", error);
+            } else if (data) {
+                setUsers(data as any);
+            }
             setIsLoading(false);
         };
 
         fetchUsers();
-    }, []);
+    }, [supabase]);
 
     const filteredUsers = users.filter(u =>
         u.full_name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -81,7 +94,7 @@ export default function UsersPage() {
                             </TableRow>
                         ) : (
                             filteredUsers.map((user) => {
-                                const activeMembership = user.memberships?.find((m: any) => m.is_active);
+                                const activeMembership = user.memberships?.find((m) => m.is_active);
                                 return (
                                     <TableRow key={user.id} className="border-zinc-800 hover:bg-zinc-900">
                                         <TableCell className="font-medium text-white flex items-center gap-3">

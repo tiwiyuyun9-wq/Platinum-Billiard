@@ -13,9 +13,6 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DateRangePicker } from "@/components/ui/date-range-picker"; // Might need to create this or use standard input
-import { useState } from "react";
-// For now, standard input for date
 import { Input } from "@/components/ui/input";
 
 const MOCK_REVENUE_DATA = [
@@ -40,7 +37,6 @@ const MOCK_PEAK_HOURS = [
 ];
 
 export default function ReportsPage() {
-    const [date, setDate] = useState<Date | undefined>(new Date());
 
     return (
         <div className="space-y-6">
@@ -106,7 +102,7 @@ export default function ReportsPage() {
                                     <Tooltip
                                         contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', color: '#fff' }}
                                         itemStyle={{ color: '#fff' }}
-                                        formatter={(value: number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value)}
+                                        formatter={(value: any) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value)}
                                     />
                                     <Bar dataKey="total" fill="#10b981" radius={[4, 4, 0, 0]} />
                                 </BarChart>

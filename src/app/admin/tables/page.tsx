@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import {
     DndContext,
@@ -15,10 +15,7 @@ import {
     DragEndEvent,
 } from "@dnd-kit/core";
 import {
-    arrayMove,
-    SortableContext,
     sortableKeyboardCoordinates,
-    verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { TableCardDraggable } from "@/components/features/admin/tables/TableCardDraggable";
 import { ColumnDroppable } from "@/components/features/admin/tables/ColumnDroppable";
@@ -54,6 +51,16 @@ export default function TableManagementPage() {
         })
     );
 
+    const fetchTables = useCallback(async () => {
+        const { data, error } = await supabase.from("tables").select("*").order("name");
+        if (error) {
+            toast.error("Gagal memuat data meja");
+            return;
+        }
+        setTables(data as Table[]);
+        setIsLoading(false);
+    }, [supabase]);
+
     useEffect(() => {
         fetchTables();
 
@@ -78,17 +85,7 @@ export default function TableManagementPage() {
         return () => {
             supabase.removeChannel(channel);
         };
-    }, []);
-
-    const fetchTables = async () => {
-        const { data, error } = await supabase.from("tables").select("*").order("name");
-        if (error) {
-            toast.error("Gagal memuat data meja");
-            return;
-        }
-        setTables(data as Table[]);
-        setIsLoading(false);
-    };
+    }, [supabase, fetchTables]);
 
     const handleDragStart = (event: DragStartEvent) => {
         setActiveId(event.active.id as string);

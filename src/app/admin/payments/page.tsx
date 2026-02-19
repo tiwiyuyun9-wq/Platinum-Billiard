@@ -29,10 +29,6 @@ export default function PaymentVerificationPage() {
     const [isLoading, setIsLoading] = useState(true);
     const supabase = createClient();
 
-    useEffect(() => {
-        fetchPendingBookings();
-    }, []);
-
     const fetchPendingBookings = async () => {
         const { data, error } = await supabase
             .from("bookings")
@@ -61,6 +57,10 @@ export default function PaymentVerificationPage() {
         }
         setIsLoading(false);
     };
+
+    useEffect(() => {
+        fetchPendingBookings();
+    }, [supabase]);
 
     const handleAction = async (bookingId: string, action: "approve" | "reject") => {
         const newStatus = action === "approve" ? "confirmed" : "rejected";
