@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
 // import { getUserMembership } from "@/utils/supabase/membership"; // Don't import this, it has server code
-import { CreditCard, LogOut, Settings, User as UserIcon, Gift } from "lucide-react";
+import { CreditCard, LogOut, Settings, User as UserIcon, Gift, Shield } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Membership } from "@/utils/supabase/membership-types";
@@ -23,6 +23,7 @@ export function Header() {
     // Client-side state for user & membership to avoid hydration mismatch
     const [user, setUser] = useState<User | null>(null);
     const [membership, setMembership] = useState<Membership | null>(null);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [authOpen, setAuthOpen] = useState(false);
     const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
@@ -33,6 +34,17 @@ export function Header() {
             const { data: { user } } = await supabase.auth.getUser();
             setUser(user);
             fetchMembership(user?.id);
+
+            if (user) {
+                const { data } = await supabase
+                    .from("profiles")
+                    .select("role")
+                    .eq("id", user.id)
+                    .single();
+                setIsAdmin(data?.role === 'admin' || user.email === 'admin@platinumbilliard.com' || user.user_metadata?.role === 'admin');
+            } else {
+                setIsAdmin(false);
+            }
         };
 
         const fetchMembership = async (userId: string | undefined) => {
@@ -160,6 +172,14 @@ export function Header() {
                                                 <span>Membership</span>
                                             </Link>
                                         </DropdownMenuItem>
+                                        {isAdmin && (
+                                            <DropdownMenuItem className="focus:bg-zinc-900 focus:text-white cursor-pointer group" asChild>
+                                                <Link href="/admin">
+                                                    <Shield className="mr-2 h-4 w-4 text-zinc-500 group-hover:text-indigo-400" />
+                                                    <span>Admin Dashboard</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        )}
                                         <DropdownMenuItem className="focus:bg-zinc-900 focus:text-white cursor-pointer group" asChild>
                                             <Link href="/profile?tab=settings">
                                                 <Settings className="mr-2 h-4 w-4 text-zinc-500 group-hover:text-emerald-400" />
