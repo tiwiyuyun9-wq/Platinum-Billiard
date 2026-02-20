@@ -9,6 +9,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 
 type AuthMode = "login" | "register";
 
@@ -101,33 +102,41 @@ export function AuthModal({ trigger, defaultMode = "login", open, onOpenChange }
                     </DialogHeader>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        {mode === "register" && (
-                            <>
-                                <div className="space-y-2">
-                                    <Label htmlFor="fullName" className="text-zinc-300">Nama Lengkap</Label>
-                                    <Input
-                                        id="fullName"
-                                        placeholder="John Doe"
-                                        value={fullName}
-                                        onChange={(e) => setFullName(e.target.value)}
-                                        className="bg-zinc-900 border-zinc-800 focus:border-white/20 text-white placeholder:text-zinc-600"
-                                        required
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="phone" className="text-zinc-300">Nomor WhatsApp</Label>
-                                    <Input
-                                        id="phone"
-                                        type="tel"
-                                        placeholder="0812..."
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                        className="bg-zinc-900 border-zinc-800 focus:border-white/20 text-white placeholder:text-zinc-600"
-                                        required
-                                    />
-                                </div>
-                            </>
-                        )}
+                        <AnimatePresence mode="popLayout">
+                            {mode === "register" && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                                    className="space-y-4 overflow-hidden"
+                                >
+                                    <div className="space-y-2">
+                                        <Label htmlFor="fullName" className="text-zinc-300">Nama Lengkap</Label>
+                                        <Input
+                                            id="fullName"
+                                            placeholder="John Doe"
+                                            value={fullName}
+                                            onChange={(e) => setFullName(e.target.value)}
+                                            className="bg-zinc-900 border-zinc-800 focus:border-white/20 text-white placeholder:text-zinc-600"
+                                            required={mode === "register"}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="phone" className="text-zinc-300">Nomor WhatsApp</Label>
+                                        <Input
+                                            id="phone"
+                                            type="tel"
+                                            placeholder="0812..."
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            className="bg-zinc-900 border-zinc-800 focus:border-white/20 text-white placeholder:text-zinc-600"
+                                            required={mode === "register"}
+                                        />
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                         <div className="space-y-2">
                             <Label htmlFor="email" className="text-zinc-300">Email</Label>
@@ -155,11 +164,18 @@ export function AuthModal({ trigger, defaultMode = "login", open, onOpenChange }
                             />
                         </div>
 
-                        {error && (
-                            <div className="text-xs text-red-500 bg-red-500/10 p-2 rounded">
-                                {error}
-                            </div>
-                        )}
+                        <AnimatePresence>
+                            {error && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="text-xs text-red-500 bg-red-500/10 rounded overflow-hidden"
+                                >
+                                    <div className="p-2">{error}</div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                         <Button
                             type="submit"
