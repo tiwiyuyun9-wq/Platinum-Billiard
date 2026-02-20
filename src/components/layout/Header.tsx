@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
+import { usePathname } from "next/navigation";
 // import { getUserMembership } from "@/utils/supabase/membership"; // Don't import this, it has server code
 import { CreditCard, LogOut, Settings, User as UserIcon, Gift, Shield } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -20,12 +21,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function Header() {
+    const pathname = usePathname();
     // Client-side state for user & membership to avoid hydration mismatch
     const [user, setUser] = useState<User | null>(null);
     const [membership, setMembership] = useState<Membership | null>(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [authOpen, setAuthOpen] = useState(false);
     const [authMode, setAuthMode] = useState<"login" | "register">("login");
+
+    if (pathname?.startsWith("/admin")) return null;
 
     useEffect(() => {
         const supabase = createClient();
