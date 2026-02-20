@@ -159,7 +159,7 @@ export default function BookingPage() {
                                 key={table.id}
                                 id={table.id}
                                 name={table.name}
-                                status={table.status as any}
+                                status={table.status as "available" | "occupied" | "booked" | "maintenance"}
                                 price={table.price}
                                 imageUrl={table.imageUrl || ''}
                                 timePlayedStart={table.status === 'occupied' ? new Date().toISOString() : undefined}

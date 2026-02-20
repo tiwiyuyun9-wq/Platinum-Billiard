@@ -105,11 +105,6 @@ export function AuthModal({ trigger, defaultMode = "login", open, onOpenChange }
         }
     };
 
-    const toggleMode = () => {
-        setMode(mode === "login" ? "register" : "login");
-        setError(null);
-    };
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange} modal={false}>
             {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
