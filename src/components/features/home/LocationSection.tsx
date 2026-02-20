@@ -1,74 +1,74 @@
 "use client";
-import { MessageCircle, MapPin, Clock, Phone, ArrowRight, Navigation } from "lucide-react";
+import { MapPin, Clock, Phone, ArrowRight, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function LocationSection() {
     return (
-        <section className="py-32 bg-zinc-950 relative overflow-hidden">
+        <section className="py-16 md:py-32 bg-zinc-950 relative overflow-hidden">
             {/* Background Ambient Effects */}
-            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-900/10 rounded-full blur-[120px] pointer-events-none"></div>
-            <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[500px] h-[500px] bg-zinc-800/20 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-emerald-900/10 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-zinc-800/20 rounded-full blur-[120px] pointer-events-none"></div>
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="max-w-7xl mx-auto">
 
-                    <div className="flex flex-col xl:flex-row gap-16 items-center">
+                    <div className="flex flex-col xl:flex-row gap-10 md:gap-16 items-center">
 
                         {/* Text Content */}
-                        <div className="flex-1 space-y-12">
+                        <div className="flex-1 space-y-8 md:space-y-12 w-full text-center xl:text-left">
                             <div>
-                                <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 text-xs font-bold tracking-widest text-emerald-400 uppercase bg-emerald-500/10 rounded-full border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                                <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 mb-4 md:mb-6 text-[10px] sm:text-xs font-bold tracking-widest text-emerald-400 uppercase bg-emerald-500/10 rounded-full border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
                                     <MapPin className="w-3.5 h-3.5" />
                                     <span>Lokasi Utama</span>
                                 </div>
-                                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight leading-tight">
+                                <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-4 md:mb-6 tracking-tight leading-tight">
                                     Kunjungi <br className="hidden sm:block" />
                                     <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-zinc-200 to-zinc-500">
                                         Platinum Billiard
                                     </span>
                                 </h2>
-                                <p className="text-zinc-400 text-lg sm:text-xl leading-relaxed max-w-xl">
+                                <p className="text-zinc-400 text-base sm:text-xl leading-relaxed max-w-xl mx-auto xl:mx-0 px-4 sm:px-0">
                                     Area parkir luas, fasilitas premium, dan meja standar turnamen menunggu Anda. Temukan pengalaman bermain billiard terbaik di Banjarnegara.
                                 </p>
                             </div>
 
-                            <div className="grid sm:grid-cols-2 gap-6 w-full max-w-2xl">
+                            <div className="grid sm:grid-cols-2 gap-4 md:gap-6 w-full max-w-2xl mx-auto xl:mx-0 text-left">
                                 {/* Card 1: Alamat */}
-                                <div className="group p-6 rounded-3xl bg-zinc-900/40 border border-white/5 backdrop-blur-md hover:border-emerald-500/30 hover:bg-zinc-900/60 transition-all duration-500 shadow-xl shadow-black/20 relative overflow-hidden">
+                                <div className="group p-5 md:p-6 rounded-2xl md:rounded-3xl bg-zinc-900/40 border border-white/5 backdrop-blur-md hover:border-emerald-500/30 hover:bg-zinc-900/60 transition-all duration-500 shadow-xl shadow-black/20 relative overflow-hidden">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl group-hover:bg-emerald-500/10 transition-colors duration-500"></div>
-                                    <div className="w-12 h-12 rounded-2xl bg-zinc-800/80 border border-white/5 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-inner">
-                                        <MapPin className="w-5 h-5 text-emerald-400" />
+                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-zinc-800/80 border border-white/5 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-inner">
+                                        <MapPin className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" />
                                     </div>
-                                    <h3 className="font-bold text-zinc-100 mb-2 text-lg">Alamat</h3>
-                                    <p className="text-sm text-zinc-400 leading-relaxed font-medium">
+                                    <h3 className="font-bold text-zinc-100 mb-1 md:mb-2 text-base md:text-lg">Alamat</h3>
+                                    <p className="text-xs md:text-sm text-zinc-400 leading-relaxed font-medium">
                                         Sokanandi Timur SMP 5<br /> Banjarnegara, Jawa Tengah
                                     </p>
                                 </div>
 
                                 {/* Card 2: Jam Operasional */}
-                                <div className="group p-6 rounded-3xl bg-zinc-900/40 border border-white/5 backdrop-blur-md hover:border-emerald-500/30 hover:bg-zinc-900/60 transition-all duration-500 shadow-xl shadow-black/20 relative overflow-hidden">
+                                <div className="group p-5 md:p-6 rounded-2xl md:rounded-3xl bg-zinc-900/40 border border-white/5 backdrop-blur-md hover:border-emerald-500/30 hover:bg-zinc-900/60 transition-all duration-500 shadow-xl shadow-black/20 relative overflow-hidden">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl group-hover:bg-emerald-500/10 transition-colors duration-500"></div>
-                                    <div className="w-12 h-12 rounded-2xl bg-zinc-800/80 border border-white/5 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 shadow-inner">
-                                        <Clock className="w-5 h-5 text-emerald-400" />
+                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-zinc-800/80 border border-white/5 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 shadow-inner">
+                                        <Clock className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" />
                                     </div>
-                                    <h3 className="font-bold text-zinc-100 mb-2 text-lg">Jam Operasional</h3>
-                                    <p className="text-sm text-zinc-400 leading-relaxed font-medium">
+                                    <h3 className="font-bold text-zinc-100 mb-1 md:mb-2 text-base md:text-lg">Jam Operasional</h3>
+                                    <p className="text-xs md:text-sm text-zinc-400 leading-relaxed font-medium">
                                         Buka Setiap Hari<br />
                                         <span className="text-emerald-400 font-bold tracking-wide">11.00 - 02.00 WIB</span>
                                     </p>
                                 </div>
 
                                 {/* Card 3: Kontak (Full Width) */}
-                                <div className="group sm:col-span-2 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-zinc-900/60 to-zinc-900/40 border border-white/5 backdrop-blur-md hover:border-emerald-500/30 transition-all duration-500 shadow-xl shadow-black/20 flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between relative overflow-hidden">
+                                <div className="group sm:col-span-2 p-5 md:p-6 sm:p-8 rounded-2xl md:rounded-3xl bg-gradient-to-br from-zinc-900/60 to-zinc-900/40 border border-white/5 backdrop-blur-md hover:border-emerald-500/30 transition-all duration-500 shadow-xl shadow-black/20 flex flex-col sm:flex-row gap-4 md:gap-6 items-start sm:items-center justify-between relative overflow-hidden">
                                     <div className="absolute inset-0 bg-emerald-500/0 group-hover:bg-emerald-500/[0.02] transition-colors duration-500"></div>
-                                    <div className="flex items-center gap-5 relative z-10">
-                                        <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-                                            <Phone className="w-6 h-6 text-white" />
+                                    <div className="flex items-center gap-4 md:gap-5 relative z-10 w-full sm:w-auto">
+                                        <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                                            <Phone className="w-5 h-5 md:w-6 md:h-6 text-white" />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-white mb-1.5 text-lg">Butuh Bantuan Navigasi?</h3>
-                                            <p className="text-sm font-medium text-zinc-400 tracking-wide">
-                                                0852-5748-7828 <span className="text-zinc-600 mx-2">|</span> 0813-3029-4557
+                                            <h3 className="font-bold text-white mb-1.5 text-base md:text-lg">Butuh Bantuan Navigasi?</h3>
+                                            <p className="text-xs md:text-sm font-medium text-zinc-400 tracking-wide flex flex-col sm:inline-block">
+                                                <span>0852-5748-7828</span> <span className="hidden sm:inline-block text-zinc-600 mx-2">|</span> <span>0813-3029-4557</span>
                                             </p>
                                         </div>
                                     </div>
@@ -89,19 +89,19 @@ export function LocationSection() {
                             {/* Glow behind map */}
                             <div className="absolute -inset-4 bg-gradient-to-b from-zinc-800 to-zinc-950 opacity-40 blur-2xl -z-10 rounded-[3rem]"></div>
 
-                            <div className="relative rounded-[2.5rem] p-3 bg-gradient-to-b from-zinc-800/80 to-zinc-950/80 border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] backdrop-blur-xl group transform-gpu transition-all duration-700 hover:shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]">
+                            <div className="relative rounded-2xl md:rounded-[2.5rem] p-2 md:p-3 bg-gradient-to-b from-zinc-800/80 to-zinc-950/80 border border-white/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] backdrop-blur-xl group transform-gpu transition-all duration-700 hover:shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]">
 
                                 {/* Top bar of the frame (like a browser or UI window) */}
-                                <div className="h-8 flex items-center px-4 gap-2 mb-2">
-                                    <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
-                                    <div className="w-3 h-3 rounded-full bg-amber-500/50"></div>
-                                    <div className="w-3 h-3 rounded-full bg-emerald-500/50"></div>
+                                <div className="h-6 md:h-8 flex items-center px-3 md:px-4 gap-1.5 md:gap-2 mb-2">
+                                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-500/50"></div>
+                                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-amber-500/50"></div>
+                                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-emerald-500/50"></div>
                                     <div className="ml-auto flex items-center gap-2">
-                                        <div className="h-1.5 w-16 bg-white/5 rounded-full"></div>
+                                        <div className="h-1 md:h-1.5 w-12 md:w-16 bg-white/5 rounded-full"></div>
                                     </div>
                                 </div>
 
-                                <div className="relative rounded-3xl overflow-hidden aspect-[4/3] xl:aspect-[4/4] bg-zinc-950">
+                                <div className="relative rounded-xl md:rounded-3xl overflow-hidden aspect-[4/4] sm:aspect-[4/3] xl:aspect-[4/4] bg-zinc-950">
 
                                     {/* Open in maps overlay */}
                                     <div className="absolute inset-0 bg-zinc-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 flex flex-col items-center justify-center backdrop-blur-sm">

@@ -47,22 +47,22 @@ const FEATURES = [
 
 export function BentoFeatures() {
     return (
-        <section className="py-24 bg-zinc-950">
+        <section className="py-16 md:py-24 bg-zinc-950">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
+                <div className="text-center mb-10 md:mb-16">
+                    <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 md:mb-4">
                         Fasilitas Kami
                     </h2>
-                    <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+                    <p className="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto px-4 sm:px-0">
                         Kenyamanan bermain dan bersantai adalah prioritas kami.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-4 h-auto md:h-[500px]">
+                <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-[repeat(5,200px)] md:grid-rows-2 gap-4 md:gap-5 h-auto md:h-[500px]">
                     {FEATURES.map((feature, index) => (
                         <div
                             key={index}
-                            className={`p-6 rounded-2xl border border-zinc-800 hover:border-zinc-700 transition-all group overflow-hidden relative ${feature.bgPattern} ${feature.className}`}
+                            className={`p-5 md:p-6 rounded-2xl border border-zinc-800 hover:border-zinc-700 transition-all group overflow-hidden relative ${feature.bgPattern} ${feature.className}`}
                         >
                             {/* Background Image */}
                             <div className="absolute inset-0 z-0 opacity-40 group-hover:opacity-60 transition-opacity">

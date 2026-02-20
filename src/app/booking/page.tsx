@@ -4,25 +4,27 @@ import { useState } from "react";
 import { TableCard } from "@/components/features/tables/TableCard";
 import { Info } from "lucide-react";
 import { BookingModal } from "@/components/features/booking/BookingModal";
+import { getStorageUrl } from "@/utils/supabase/storage";
 
 
 // Mock Data - Adjusted to Night Rates (Standard)
 const MOCK_TABLES = [
     // Rasson Tables (1-4)
-    { id: "1", name: "Meja Rasson 01", status: "available", price: 35000, imageUrl: "https://images.unsplash.com/photo-1542319770-5b32e2c5aa82?auto=format&fit=crop&q=80&w=800" },
-    { id: "2", name: "Meja Rasson 02", status: "occupied", price: 35000, imageUrl: "https://images.unsplash.com/photo-1579782522771-477c7f3f2252?auto=format&fit=crop&q=80&w=800" },
-    { id: "3", name: "Meja Rasson 03", status: "booked", price: 35000, imageUrl: "https://images.unsplash.com/photo-1591119567954-5a242c13d783?auto=format&fit=crop&q=80&w=800" },
-    { id: "4", name: "Meja Rasson 04", status: "available", price: 35000, imageUrl: "https://images.unsplash.com/photo-1620025974052-a56763568c48?auto=format&fit=crop&q=80&w=800" },
+    { id: "1", name: "Meja Rasson 01", status: "available", price: 35000, imageUrl: getStorageUrl('tables/rasson-1.jpg') },
+    { id: "2", name: "Meja Rasson 02", status: "occupied", price: 35000, timePlayedStart: new Date(Date.now() - 45 * 60 * 1000).toISOString(), bookedUntil: "21:30 WIB", imageUrl: getStorageUrl('tables/rasson-2.jpg') },
+    { id: "3", name: "Meja Rasson 03", status: "booked", price: 35000, bookedUntil: "Mulai 20:00 WIB", imageUrl: getStorageUrl('tables/rasson-3.jpg') },
+    { id: "4", name: "Meja Rasson 04", status: "available", price: 35000, imageUrl: getStorageUrl('tables/rasson-4.jpg') },
     // Biasa Tables (5-8)
-    { id: "5", name: "Meja Biasa 01", status: "available", price: 30000, imageUrl: "https://images.unsplash.com/photo-1554350171-8bc42f277ca9?auto=format&fit=crop&q=80&w=800" },
-    { id: "6", name: "Meja Biasa 02", status: "available", price: 30000, imageUrl: "https://images.unsplash.com/photo-1558273615-585358055c5e?auto=format&fit=crop&q=80&w=800" },
-    { id: "7", name: "Meja Biasa 03", status: "occupied", price: 30000, imageUrl: "https://images.unsplash.com/photo-1620025974052-a56763568c48?auto=format&fit=crop&q=80&w=800" },
-    { id: "8", name: "Meja Biasa 04", status: "available", price: 30000, imageUrl: "https://images.unsplash.com/photo-1542319770-5b32e2c5aa82?auto=format&fit=crop&q=80&w=800" },
+    { id: "5", name: "Meja Biasa 01", status: "available", price: 30000, imageUrl: getStorageUrl('tables/biasa-1.webp') },
+    { id: "6", name: "Meja Biasa 02", status: "available", price: 30000, imageUrl: getStorageUrl('tables/biasa-2.webp') },
+    { id: "7", name: "Meja Biasa 03", status: "occupied", price: 30000, timePlayedStart: new Date(Date.now() - 75 * 60 * 1000).toISOString(), bookedUntil: "22:00 WIB", imageUrl: getStorageUrl('tables/biasa-3.webp') },
+    { id: "8", name: "Meja Biasa 04", status: "available", price: 30000, imageUrl: getStorageUrl('tables/biasa-4.webp') },
 ] as const;
 
 export default function BookingPage() {
     const [selectedTable, setSelectedTable] = useState<{ id: string; name: string; price: number } | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [filterMode, setFilterMode] = useState<'all' | 'available'>('all');
 
     const handleBook = (id: string) => {
         const table = MOCK_TABLES.find(t => t.id === id);
@@ -32,9 +34,13 @@ export default function BookingPage() {
         }
     };
 
+    const displayedTables = filterMode === 'all'
+        ? MOCK_TABLES
+        : MOCK_TABLES.filter(t => t.status === 'available');
+
     return (
-        <main className="min-h-screen bg-zinc-950 text-zinc-50 pt-40 pb-20">
-            <div className="container mx-auto px-4 space-y-8">
+        <main className="min-h-screen bg-zinc-950 text-zinc-50 pt-28 sm:pt-40 pb-20">
+            <div className="container mx-auto px-4 sm:px-6 space-y-8 sm:space-y-10">
                 <div className="text-center space-y-6">
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
                         Booking <span className="bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-200 bg-clip-text text-transparent">Meja</span>
@@ -74,18 +80,34 @@ export default function BookingPage() {
                     </div>
                 </div>
 
-                {/* Filter Section (Simple) */}
-                <div className="flex justify-center gap-4 pt-4">
-                    <button className="px-6 py-2 rounded-full border border-zinc-700 bg-zinc-900 text-zinc-300 hover:border-zinc-500 hover:text-white transition-all text-sm font-medium">
-                        Semua Meja
-                    </button>
-                    <button className="px-6 py-2 rounded-full border border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300 transition-all text-sm font-medium">
-                        Status Tersedia
-                    </button>
+                {/* Enterprise Filter Section */}
+                <div className="flex justify-center pt-6 pb-2">
+                    <div className="inline-flex p-1.5 bg-zinc-900/80 backdrop-blur-xl border border-white/5 rounded-full shadow-[0_0_25px_rgba(0,0,0,0.5)] relative">
+                        {/* Animated background pill could be added here, but active background is simple enough */}
+                        <button
+                            onClick={() => setFilterMode('all')}
+                            className={`relative px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${filterMode === 'all'
+                                ? 'bg-white text-zinc-950 shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-100'
+                                : 'text-zinc-400 hover:text-white hover:bg-white/5 scale-95'
+                                }`}
+                        >
+                            Semua Meja
+                        </button>
+                        <button
+                            onClick={() => setFilterMode('available')}
+                            className={`relative px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-2 ${filterMode === 'available'
+                                ? 'bg-emerald-500 text-emerald-950 shadow-[0_0_20px_rgba(16,185,129,0.3)] scale-100'
+                                : 'text-zinc-400 hover:text-white hover:bg-white/5 scale-95'
+                                }`}
+                        >
+                            <span className={`w-2 h-2 rounded-full ${filterMode === 'available' ? 'bg-emerald-950 animate-pulse' : 'bg-emerald-500'}`}></span>
+                            Tersedia
+                        </button>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {MOCK_TABLES.map((table) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-8 pb-10">
+                    {displayedTables.map((table) => (
                         <TableCard
                             key={table.id}
                             {...table}

@@ -94,20 +94,20 @@ export function Header() {
     if (pathname?.startsWith("/admin")) return null;
 
     return (
-        <header className="fixed top-0 z-50 w-full pt-6 px-4 pr-[calc(1rem+var(--removed-body-scroll-bar-size,0px))] transition-[padding]">
-            <div className="container mx-auto">
-                <div className="mx-auto w-full max-w-7xl rounded-full border border-white/10 bg-zinc-950/70 shadow-[0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-xl supports-[backdrop-filter]:bg-zinc-950/30 px-6 h-20 flex items-center justify-between transition-all duration-500 hover:border-white/20 hover:bg-zinc-950/80 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+        <header className="fixed top-0 z-50 w-full pt-0 md:pt-6 px-0 md:px-4 pr-0 md:pr-[calc(1rem+var(--removed-body-scroll-bar-size,0px))] transition-[padding]">
+            <div className="container mx-auto px-0 md:px-4">
+                <div className="mx-auto w-full max-w-7xl rounded-none md:rounded-full border-b md:border border-white/5 md:border-white/10 bg-zinc-950/80 md:bg-zinc-950/70 shadow-none md:shadow-[0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-xl supports-[backdrop-filter]:bg-zinc-950/60 md:supports-[backdrop-filter]:bg-zinc-950/30 px-4 md:px-6 h-14 md:h-20 flex items-center justify-between transition-all duration-500 hover:border-white/20 hover:bg-zinc-950/90 md:hover:bg-zinc-950/80 hover:shadow-none md:hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]">
 
                     {/* Logo - Refined */}
-                    <Link href="/" className="flex items-center space-x-3 shrink-0 group">
-                        <div className="bg-gradient-to-br from-zinc-100 to-zinc-600 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-zinc-500/10 transition-transform group-hover:scale-105 group-hover:shadow-zinc-500/20">
-                            <span className="text-zinc-950 font-extrabold text-xl leading-none pt-0.5 font-serif">P</span>
+                    <Link href="/" className="flex items-center space-x-2 md:space-x-3 shrink-0 group">
+                        <div className="bg-gradient-to-br from-zinc-100 to-zinc-600 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg shadow-zinc-500/10 transition-transform group-hover:scale-105 group-hover:shadow-zinc-500/20">
+                            <span className="text-zinc-950 font-extrabold text-base md:text-xl leading-none pt-0.5 font-serif">P</span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="hidden sm:inline-block text-lg font-bold bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent tracking-tight leading-none">
+                            <span className="inline-block text-sm md:text-lg font-bold bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent tracking-tight leading-none">
                                 Platinum
                             </span>
-                            <span className="hidden sm:inline-block text-[10px] tracking-[0.2em] text-zinc-500 uppercase font-semibold">
+                            <span className="inline-block text-[8px] md:text-[10px] tracking-[0.2em] text-zinc-500 uppercase font-semibold">
                                 Billiard
                             </span>
                         </div>
@@ -218,28 +218,26 @@ export function Header() {
                                 </DropdownMenu>
                             </div>
                         ) : (
-                            <>
-                                <div className="hidden sm:flex items-center bg-zinc-900/50 rounded-full p-1 border border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.05)] backdrop-blur-sm">
-                                    <button
-                                        onClick={() => {
-                                            setAuthMode("login");
-                                            setAuthOpen(true);
-                                        }}
-                                        className="px-6 py-2 text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-all rounded-full"
-                                    >
-                                        Masuk
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setAuthMode("register");
-                                            setAuthOpen(true);
-                                        }}
-                                        className="px-6 py-2 text-sm font-bold text-zinc-950 bg-gradient-to-tr from-white to-zinc-200 hover:to-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all scale-105"
-                                    >
-                                        Daftar
-                                    </button>
-                                </div>
-                            </>
+                            <div className="flex items-center gap-2 md:gap-0 bg-transparent md:bg-zinc-900/50 rounded-full md:p-1 border-none md:border border-white/10 md:shadow-[0_0_10px_rgba(255,255,255,0.05)] md:backdrop-blur-sm">
+                                <button
+                                    onClick={() => {
+                                        setAuthMode("login");
+                                        setAuthOpen(true);
+                                    }}
+                                    className="px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-all rounded-full bg-zinc-900/80 md:bg-transparent border border-white/5 md:border-none"
+                                >
+                                    Masuk
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setAuthMode("register");
+                                        setAuthOpen(true);
+                                    }}
+                                    className="px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm font-bold text-zinc-950 bg-gradient-to-tr from-white to-zinc-200 hover:to-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.1)] md:shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all md:scale-105"
+                                >
+                                    Daftar
+                                </button>
+                            </div>
                         )}
                     </div>
 

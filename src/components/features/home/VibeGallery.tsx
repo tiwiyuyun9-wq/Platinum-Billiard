@@ -23,25 +23,25 @@ const VIBE_IMAGES = [
 
 export function VibeGallery() {
     return (
-        <section className="py-24 bg-zinc-950 relative overflow-hidden">
+        <section className="py-16 md:py-24 bg-zinc-950 relative overflow-hidden">
             {/* Background Elements */}
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-900 via-zinc-950 to-zinc-950 -z-10" />
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="max-w-3xl mx-auto text-center mb-16">
-                    <h2 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400 mb-4">
+                <div className="max-w-3xl mx-auto text-center mb-10 md:mb-16">
+                    <h2 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-400 mb-3 md:mb-4">
                         Atmosfer Platinum
                     </h2>
-                    <p className="text-zinc-400 text-lg">
+                    <p className="text-zinc-400 text-base sm:text-lg px-4 sm:px-0">
                         Rasakan suasana berkelas yang dirancang untuk pemain serius maupun sekadar bersantai.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-12 gap-4 h-[600px] md:h-[500px]">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5 h-auto md:h-[500px]">
                     {VIBE_IMAGES.map((image, index) => (
                         <div
                             key={index}
-                            className={`relative rounded-2xl overflow-hidden group border border-zinc-800/50 hover:border-zinc-700 transition-colors ${image.className}`}
+                            className={`relative rounded-2xl overflow-hidden group border border-zinc-800/50 hover:border-zinc-700 transition-colors h-[250px] sm:h-[300px] md:h-auto ${image.className}`}
                         >
                             <Image
                                 src={image.src}

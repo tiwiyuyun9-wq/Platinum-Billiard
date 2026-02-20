@@ -74,7 +74,7 @@ export function Footer() {
                     </div>
                 </div>
             </div>
-            <div className="container mx-auto px-4 mt-16 pt-8 border-t border-zinc-900 text-center text-xs text-zinc-600">
+            <div className="container mx-auto px-4 mt-16 pt-8 pb-24 md:pb-8 border-t border-zinc-900 text-center text-xs text-zinc-600">
                 &copy; {new Date().getFullYear()} Platinum Billiard. All rights reserved.
             </div>
         </footer>
