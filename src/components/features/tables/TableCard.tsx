@@ -62,7 +62,6 @@ export function TableCard({ id, name, status, price, imageUrl, timePlayedStart, 
 
   useEffect(() => {
     if (!timePlayedStart || status !== 'occupied') {
-      setElapsedTime("");
       return;
     }
 
@@ -89,11 +88,16 @@ export function TableCard({ id, name, status, price, imageUrl, timePlayedStart, 
       setElapsedTime(formattedParts.join(':'));
     };
 
-    updateTimer(); // Initial call
+    const timeout = setTimeout(updateTimer, 0);
     const interval = setInterval(updateTimer, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(interval);
+    }
   }, [timePlayedStart, status]);
+
+  const displayElapsedTime = (!timePlayedStart || status !== 'occupied') ? "" : elapsedTime;
 
   return (
     <Card className={cn(
@@ -163,13 +167,13 @@ export function TableCard({ id, name, status, price, imageUrl, timePlayedStart, 
             </div>
           ) : (
             <div className="space-y-2.5">
-              {timePlayedStart && elapsedTime && (
+              {timePlayedStart && displayElapsedTime && (
                 <div className="flex items-center justify-between text-sm text-amber-400 font-medium bg-amber-500/10 px-4 py-3 rounded-lg border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.05)]">
                   <div className="flex items-center">
                     <Clock className="w-4 h-4 mr-2.5 animate-pulse opacity-80" />
                     <span>Playtime</span>
                   </div>
-                  <span className="font-mono tabular-nums tracking-wider text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded text-xs">{elapsedTime}</span>
+                  <span className="font-mono tabular-nums tracking-wider text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded text-xs">{displayElapsedTime}</span>
                 </div>
               )}
               {bookedUntil && (
