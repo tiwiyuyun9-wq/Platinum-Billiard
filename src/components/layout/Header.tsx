@@ -78,7 +78,7 @@ export function Header() {
     };
 
     return (
-        <header className="fixed top-0 z-50 w-full pt-6 px-4">
+        <header className="fixed top-0 z-50 w-full pt-6 px-4 pr-[calc(1rem+var(--removed-body-scroll-bar-size,0px))] transition-[padding]">
             <div className="container mx-auto">
                 <div className="mx-auto w-full max-w-7xl rounded-full border border-white/10 bg-zinc-950/70 shadow-[0_0_20px_rgba(255,255,255,0.05)] backdrop-blur-xl supports-[backdrop-filter]:bg-zinc-950/30 px-6 h-20 flex items-center justify-between transition-all duration-500 hover:border-white/20 hover:bg-zinc-950/80 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]">
 
