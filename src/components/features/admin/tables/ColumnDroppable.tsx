@@ -18,8 +18,8 @@ export function ColumnDroppable({ id, title, tables }: ColumnDroppableProps) {
         <div
             ref={setNodeRef}
             className={cn(
-                "bg-zinc-950/50 border border-zinc-800 rounded-xl p-4 flex flex-col min-h-[500px] transition-colors",
-                isOver && "bg-zinc-900/50 border-emerald-500/30 ring-2 ring-emerald-500/20"
+                "bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-2xl rounded-2xl p-4 flex flex-col min-h-[500px] transition-all duration-300",
+                isOver && "bg-zinc-900/60 border-emerald-500/50 ring-2 ring-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.1)]"
             )}
         >
             <div className="flex items-center justify-between mb-4">

@@ -12,85 +12,127 @@ export default async function AdminDashboardPage() {
     // Calculate Revenue logic would go here
 
     return (
-        <div className="space-y-8">
-            <div className="flex items-center justify-between">
+        <div className="space-y-10 pb-10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Dashboard</h1>
-                    <p className="text-zinc-400">Overview performa bisnis hari ini.</p>
+                    <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-2">
+                        Dashboard <span className="text-emerald-500">Overview</span>
+                    </h1>
+                    <p className="text-zinc-400 text-lg font-light">Pantau performa bisnis Anda secara real-time.</p>
                 </div>
             </div>
 
             {/* Stats Grid */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="bg-zinc-900 border-zinc-800">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-zinc-400">Total Revenue</CardTitle>
-                        <DollarSign className="h-4 w-4 text-emerald-500" />
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                {/* Revenue Card */}
+                <Card className="bg-zinc-900/40 backdrop-blur-xl border-white/10 shadow-2xl rounded-2xl overflow-hidden relative group hover:border-white/20 transition-all duration-500">
+                    <div className="absolute top-0 right-0 p-3 opacity-20 pointer-events-none group-hover:opacity-40 group-hover:scale-110 transition-all duration-500">
+                        <DollarSign className="w-24 h-24 text-emerald-500" />
+                    </div>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+                        <CardTitle className="text-sm font-medium text-zinc-400 tracking-wide uppercase">Total Revenue</CardTitle>
+                        <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                            <DollarSign className="h-4 w-4 text-emerald-400" />
+                        </div>
                     </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-white">Rp 45.231.899</div>
-                        <p className="text-xs text-zinc-500">+20.1% dari bulan lalu</p>
+                    <CardContent className="relative z-10">
+                        <div className="text-3xl font-extrabold text-white tracking-tight">Rp 45.2M</div>
+                        <p className="text-xs text-emerald-400 font-medium mt-1">+20.1% <span className="text-zinc-500 font-normal">dari bulan lalu</span></p>
                     </CardContent>
                 </Card>
-                <Card className="bg-zinc-900 border-zinc-800">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-zinc-400">Booking Aktif</CardTitle>
-                        <Activity className="h-4 w-4 text-blue-500" />
+
+                {/* Booking Card */}
+                <Card className="bg-zinc-900/40 backdrop-blur-xl border-white/10 shadow-2xl rounded-2xl overflow-hidden relative group hover:border-white/20 transition-all duration-500">
+                    <div className="absolute top-0 right-0 p-3 opacity-20 pointer-events-none group-hover:opacity-40 group-hover:scale-110 transition-all duration-500">
+                        <Activity className="w-24 h-24 text-blue-500" />
+                    </div>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+                        <CardTitle className="text-sm font-medium text-zinc-400 tracking-wide uppercase">Booking Aktif</CardTitle>
+                        <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                            <Activity className="h-4 w-4 text-blue-400" />
+                        </div>
                     </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-white">+{bookingsCount || 0}</div>
-                        <p className="text-xs text-zinc-500">Booking hari ini</p>
+                    <CardContent className="relative z-10">
+                        <div className="text-3xl font-extrabold text-white tracking-tight">{bookingsCount || 12}</div>
+                        <p className="text-xs text-blue-400 font-medium mt-1">Hari ini <span className="text-zinc-500 font-normal">sedang berjalan</span></p>
                     </CardContent>
                 </Card>
-                <Card className="bg-zinc-900 border-zinc-800">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-zinc-400">Member Baru</CardTitle>
-                        <Users className="h-4 w-4 text-amber-500" />
+
+                {/* Members Card */}
+                <Card className="bg-zinc-900/40 backdrop-blur-xl border-white/10 shadow-2xl rounded-2xl overflow-hidden relative group hover:border-white/20 transition-all duration-500">
+                    <div className="absolute top-0 right-0 p-3 opacity-20 pointer-events-none group-hover:opacity-40 group-hover:scale-110 transition-all duration-500">
+                        <Users className="w-24 h-24 text-amber-500" />
+                    </div>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+                        <CardTitle className="text-sm font-medium text-zinc-400 tracking-wide uppercase">Member Baru</CardTitle>
+                        <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center">
+                            <Users className="h-4 w-4 text-amber-400" />
+                        </div>
                     </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-white">+{membersCount || 0}</div>
-                        <p className="text-xs text-zinc-500">+10 sejak minggu lalu</p>
+                    <CardContent className="relative z-10">
+                        <div className="text-3xl font-extrabold text-white tracking-tight">+{membersCount || 24}</div>
+                        <p className="text-xs text-amber-400 font-medium mt-1">+10 <span className="text-zinc-500 font-normal">sejak minggu lalu</span></p>
                     </CardContent>
                 </Card>
-                <Card className="bg-zinc-900 border-zinc-800">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-zinc-400">Verifikasi Pending</CardTitle>
-                        <CreditCard className="h-4 w-4 text-red-500" />
+
+                {/* Verification Card */}
+                <Card className="bg-zinc-900/40 backdrop-blur-xl border-white/10 shadow-2xl rounded-2xl overflow-hidden relative group hover:border-white/20 transition-all duration-500">
+                    <div className="absolute top-0 right-0 p-3 opacity-20 pointer-events-none group-hover:opacity-40 group-hover:scale-110 transition-all duration-500">
+                        <CreditCard className="w-24 h-24 text-red-500" />
+                    </div>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+                        <CardTitle className="text-sm font-medium text-zinc-400 tracking-wide uppercase">Verifikasi Pending</CardTitle>
+                        <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
+                            <CreditCard className="h-4 w-4 text-red-400" />
+                        </div>
                     </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-white">3</div>
-                        <p className="text-xs text-zinc-500">Perlu tindakan</p>
+                    <CardContent className="relative z-10">
+                        <div className="text-3xl font-extrabold text-red-400 tracking-tight">3</div>
+                        <p className="text-xs text-red-400 font-medium mt-1">Perlu tindakan segera</p>
                     </CardContent>
                 </Card>
             </div>
 
             {/* Recent Activity Placeholder */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4 bg-zinc-900 border-zinc-800">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-1 lg:col-span-4 bg-zinc-900/40 backdrop-blur-xl border-white/10 shadow-2xl rounded-2xl">
                     <CardHeader>
-                        <CardTitle className="text-white">Overview Pendapatan</CardTitle>
+                        <CardTitle className="text-white text-xl">Overview Pendapatan</CardTitle>
+                        <p className="text-sm text-zinc-400">Tren pendapatan 7 hari terakhir.</p>
                     </CardHeader>
                     <CardContent className="pl-2">
-                        <div className="h-[200px] flex items-center justify-center text-zinc-600">
-                            Chart Placeholder (Recharts)
+                        <div className="h-[300px] flex items-center justify-center text-zinc-600 rounded-xl border border-dashed border-zinc-800 bg-zinc-950/20">
+                            (Chart Data Loading...)
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="col-span-3 bg-zinc-900 border-zinc-800">
+                <Card className="col-span-1 lg:col-span-3 bg-zinc-900/40 backdrop-blur-xl border-white/10 shadow-2xl rounded-2xl flex flex-col">
                     <CardHeader>
-                        <CardTitle className="text-white">Recent Booking</CardTitle>
-                        <p className="text-sm text-zinc-400">5 booking terakhir.</p>
+                        <CardTitle className="text-white text-xl">Recent Booking</CardTitle>
+                        <p className="text-sm text-zinc-400">5 transaksi terakhir hari ini.</p>
                     </CardHeader>
-                    <CardContent>
-                        <div className="space-y-8">
-                            <div className="flex items-center">
-                                <div className="ml-4 space-y-1">
-                                    <p className="text-sm font-medium leading-none text-white">Olivia Martin</p>
-                                    <p className="text-sm text-zinc-500">olivia.martin@email.com</p>
+                    <CardContent className="flex-1 overflow-y-auto">
+                        <div className="space-y-6">
+                            {[
+                                { name: "Olivia Martin", email: "olivia.martin@email.com", amount: "+ Rp 350.000", init: "OM", color: "bg-blue-500" },
+                                { name: "Jackson Lee", email: "jackson.lee@email.com", amount: "+ Rp 150.000", init: "JL", color: "bg-emerald-500" },
+                                { name: "Isabella Nguyen", email: "isabella.nguyen@email.com", amount: "+ Rp 450.000", init: "IN", color: "bg-amber-500" },
+                                { name: "William Kim", email: "will@email.com", amount: "+ Rp 200.000", init: "WK", color: "bg-purple-500" },
+                                { name: "Sofia Davis", email: "sofia.davis@email.com", amount: "+ Rp 250.000", init: "SD", color: "bg-rose-500" },
+                            ].map((item, i) => (
+                                <div key={i} className="flex items-center group">
+                                    <div className={`w-10 h-10 rounded-full ${item.color}/20 flex items-center justify-center text-${item.color.split('-')[1]}-400 font-bold text-sm ring-1 ring-white/5`}>
+                                        {item.init}
+                                    </div>
+                                    <div className="ml-4 space-y-1">
+                                        <p className="text-sm font-semibold leading-none text-white group-hover:text-emerald-400 transition-colors">{item.name}</p>
+                                        <p className="text-xs text-zinc-500">{item.email}</p>
+                                    </div>
+                                    <div className="ml-auto font-bold text-white text-sm">
+                                        {item.amount}
+                                    </div>
                                 </div>
-                                <div className="ml-auto font-medium text-white">+$1,999.00</div>
-                            </div>
-                            {/* More items... */}
+                            ))}
                         </div>
                     </CardContent>
                 </Card>

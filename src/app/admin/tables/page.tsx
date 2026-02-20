@@ -175,8 +175,13 @@ export default function TableManagementPage() {
     }
 
     return (
-        <div className="space-y-6">
-            <h1 className="text-2xl font-bold text-white">Manajemen Status Meja</h1>
+        <div className="space-y-8 pb-10">
+            <div>
+                <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-2">
+                    Manajemen <span className="text-emerald-500">Meja</span>
+                </h1>
+                <p className="text-zinc-400 text-lg font-light">Atur status ketersediaan meja dengan drag & drop secara realtime.</p>
+            </div>
 
             <DndContext
                 sensors={sensors}

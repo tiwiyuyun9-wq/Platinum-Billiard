@@ -26,22 +26,22 @@ export function TableCardDraggable({ table, overlay }: TableCardDraggableProps) 
         transition,
     };
 
-    // Style based on status for visual cue
+    // Style based on status for visual cue (prominent left border)
     const statusColor =
-        table.status === 'available' ? 'border-emerald-500/50' :
-            table.status === 'occupied' ? 'border-red-500/50' :
-                table.status === 'booked' ? 'border-amber-500/50' :
-                    'border-zinc-700';
+        table.status === 'available' ? 'border-l-4 border-l-emerald-500 border-y-white/5 border-r-white/5 text-emerald-100' :
+            table.status === 'occupied' ? 'border-l-4 border-l-red-500 border-y-white/5 border-r-white/5 text-red-100' :
+                table.status === 'booked' ? 'border-l-4 border-l-amber-500 border-y-white/5 border-r-white/5 text-amber-100' :
+                    'border-l-4 border-l-zinc-500 border-y-white/5 border-r-white/5 text-zinc-300';
 
     return (
         <Card
             ref={setNodeRef}
             style={style}
             className={cn(
-                "bg-zinc-900 mb-3 cursor-grab active:cursor-grabbing hover:border-zinc-500 transition-colors group",
+                "bg-zinc-950/80 backdrop-blur shadow-lg rounded-xl mb-3 cursor-grab active:cursor-grabbing hover:bg-zinc-900 hover:shadow-xl transition-all duration-300 group overflow-hidden",
                 statusColor,
-                isDragging && "opacity-30",
-                overlay && "opacity-100 scale-105 shadow-2xl z-50 cursor-grabbing bg-zinc-800 border-white/20"
+                isDragging && "opacity-40 scale-95 shadow-none",
+                overlay && "opacity-100 scale-105 shadow-[0_20px_40px_rgba(0,0,0,0.4)] z-50 cursor-grabbing bg-zinc-900 border-white/20 ring-2 ring-emerald-500/30"
             )}
             {...attributes}
             {...listeners}

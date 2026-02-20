@@ -49,37 +49,37 @@ export default function ReportsPage() {
             </div>
 
             <Tabs defaultValue="revenue" className="space-y-6">
-                <TabsList className="bg-zinc-900 border-zinc-800 text-zinc-400">
-                    <TabsTrigger value="revenue">Pendapatan</TabsTrigger>
-                    <TabsTrigger value="traffic">Traffic & Peak Hours</TabsTrigger>
-                    <TabsTrigger value="tables">Performa Meja</TabsTrigger>
+                <TabsList className="bg-zinc-900/60 backdrop-blur-xl border border-white/10 text-zinc-400 p-1.5 rounded-2xl h-auto">
+                    <TabsTrigger value="revenue" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-emerald-500/20 data-[state=active]:text-emerald-400 data-[state=active]:shadow-lg transition-all font-medium">Pendapatan</TabsTrigger>
+                    <TabsTrigger value="traffic" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 data-[state=active]:shadow-lg transition-all font-medium">Traffic & Peak Hours</TabsTrigger>
+                    <TabsTrigger value="tables" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 data-[state=active]:shadow-lg transition-all font-medium">Performa Meja</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="revenue" className="space-y-4">
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                        <Card className="bg-zinc-900 border-zinc-800">
+                <TabsContent value="revenue" className="space-y-6 mt-6">
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                        <Card className="bg-zinc-900/40 backdrop-blur-xl border-white/10 shadow-2xl rounded-2xl group hover:border-emerald-500/50 transition-all duration-300">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium text-zinc-400">Total Pendapatan</CardTitle>
+                                <CardTitle className="text-sm font-medium text-zinc-400 uppercase tracking-wider">Total Pendapatan</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-white">Rp 49.200.000</div>
-                                <p className="text-xs text-emerald-500">+12% dari minggu lalu</p>
+                                <div className="text-3xl font-extrabold text-white">Rp 49.2M</div>
+                                <p className="text-xs text-emerald-400 font-bold mt-1">+12% <span className="text-zinc-500 font-normal">dari minggu lalu</span></p>
                             </CardContent>
                         </Card>
-                        <Card className="bg-zinc-900 border-zinc-800">
+                        <Card className="bg-zinc-900/40 backdrop-blur-xl border-white/10 shadow-2xl rounded-2xl group hover:border-emerald-500/50 transition-all duration-300">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium text-zinc-400">Rata-rata Harian</CardTitle>
+                                <CardTitle className="text-sm font-medium text-zinc-400 uppercase tracking-wider">Rata-rata Harian</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-white">Rp 7.028.571</div>
+                                <div className="text-3xl font-extrabold text-white">Rp 7.0M</div>
                             </CardContent>
                         </Card>
                     </div>
 
-                    <Card className="bg-zinc-900 border-zinc-800">
-                        <CardHeader>
-                            <CardTitle className="text-white">Tren Pendapatan Mingguan</CardTitle>
-                            <CardDescription>Grafik pendapatan kotor per hari.</CardDescription>
+                    <Card className="bg-zinc-900/40 backdrop-blur-xl border-white/10 shadow-2xl rounded-2xl overflow-hidden mt-6">
+                        <CardHeader className="border-b border-white/5 bg-white/5">
+                            <CardTitle className="text-white text-xl">Tren Pendapatan Mingguan</CardTitle>
+                            <CardDescription className="text-zinc-400">Grafik pendapatan kotor per hari.</CardDescription>
                         </CardHeader>
                         <CardContent className="h-[400px]">
                             <ResponsiveContainer width="100%" height="100%">
@@ -111,11 +111,11 @@ export default function ReportsPage() {
                     </Card>
                 </TabsContent>
 
-                <TabsContent value="traffic" className="space-y-4">
-                    <Card className="bg-zinc-900 border-zinc-800">
-                        <CardHeader>
-                            <CardTitle className="text-white">Peak Hours (Jam Ramai)</CardTitle>
-                            <CardDescription>Rata-rata pengunjung berdasarkan jam operasional.</CardDescription>
+                <TabsContent value="traffic" className="space-y-6 mt-6">
+                    <Card className="bg-zinc-900/40 backdrop-blur-xl border-white/10 shadow-2xl rounded-2xl overflow-hidden">
+                        <CardHeader className="border-b border-white/5 bg-white/5">
+                            <CardTitle className="text-white text-xl">Peak Hours (Jam Ramai)</CardTitle>
+                            <CardDescription className="text-zinc-400">Rata-rata pengunjung berdasarkan jam operasional.</CardDescription>
                         </CardHeader>
                         <CardContent className="h-[400px]">
                             <ResponsiveContainer width="100%" height="100%">
