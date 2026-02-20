@@ -4,7 +4,7 @@ import { DigitalMemberCard } from "@/components/features/membership/DigitalMembe
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, History, Star, Zap } from "lucide-react";
+import { ArrowRight, History, Star, Zap, Calendar } from "lucide-react";
 import Link from "next/link";
 
 export default async function MyMembershipPage() {
@@ -51,9 +51,10 @@ export default async function MyMembershipPage() {
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
-                            <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700" size="lg">
-                                <Link href="/reservasi">
-                                    Book Meja
+                            <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-full py-6">
+                                <Link href="/booking">
+                                    <Calendar className="mr-2 h-5 w-5" />
+                                    Book Meja Sekarang
                                 </Link>
                             </Button>
                             <Button asChild variant="outline" className="w-full border-zinc-700 hover:bg-zinc-800" size="lg">

@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { createBooking, confirmPayment } from "@/app/reservasi/actions";
+import { createBooking, confirmPayment } from "@/app/booking/actions";
 import { CalendarIcon, Clock, CheckCircle, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";

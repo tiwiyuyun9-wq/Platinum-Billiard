@@ -4,7 +4,7 @@ import { useState } from "react";
 import { TableCard } from "@/components/features/tables/TableCard";
 import { Info } from "lucide-react";
 import { BookingModal } from "@/components/features/booking/BookingModal";
-import { LiveTableMap } from "@/components/features/map/LiveTableMap";
+
 
 // Mock Data - Adjusted to Night Rates (Standard)
 const MOCK_TABLES = [
@@ -20,7 +20,7 @@ const MOCK_TABLES = [
     { id: "8", name: "Meja Biasa 04", status: "available", price: 30000, imageUrl: "https://images.unsplash.com/photo-1542319770-5b32e2c5aa82?auto=format&fit=crop&q=80&w=800" },
 ] as const;
 
-export default function ReservationPage() {
+export default function BookingPage() {
     const [selectedTable, setSelectedTable] = useState<{ id: string; name: string; price: number } | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -37,7 +37,7 @@ export default function ReservationPage() {
             <div className="container mx-auto px-4 space-y-8">
                 <div className="text-center space-y-6">
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
-                        Reservasi <span className="bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-200 bg-clip-text text-transparent">Meja</span>
+                        Booking <span className="bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-200 bg-clip-text text-transparent">Meja</span>
                     </h1>
                     <p className="text-zinc-400 max-w-2xl mx-auto text-lg font-light leading-relaxed">
                         Pilih meja favorit Anda, cek ketersediaan realtime, dan booking langsung.
@@ -82,10 +82,6 @@ export default function ReservationPage() {
                     <button className="px-6 py-2 rounded-full border border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300 transition-all text-sm font-medium">
                         Status Tersedia
                     </button>
-                </div>
-
-                <div className="mb-12">
-                    <LiveTableMap />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

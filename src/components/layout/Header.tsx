@@ -113,24 +113,34 @@ export function Header() {
                         </div>
                     </Link>
 
-                    {/* Navigation - Polished */}
-                    <nav className="hidden md:flex items-center gap-10 text-sm font-medium text-zinc-400">
-                        <Link href="/" className="hover:text-white transition-colors relative group py-2">
-                            Home
-                            <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full group-hover:left-0 opacity-0 group-hover:opacity-100"></span>
-                        </Link>
-                        <Link href="/reservasi" className="hover:text-white transition-colors relative group py-2">
-                            Booking
-                            <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full group-hover:left-0 opacity-0 group-hover:opacity-100"></span>
-                        </Link>
-                        <Link href="/membership" className="hover:text-white transition-colors relative group py-2">
-                            Membership
-                            <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full group-hover:left-0 opacity-0 group-hover:opacity-100"></span>
-                        </Link>
-                        <Link href="/tournament" className="hover:text-white transition-colors relative group py-2">
-                            Tournament
-                            <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full group-hover:left-0 opacity-0 group-hover:opacity-100"></span>
-                        </Link>
+                    {/* Navigation - Premium Enterprise Style */}
+                    <nav className="hidden md:flex items-center gap-2 lg:gap-4 text-sm font-medium">
+                        {[
+                            { name: "Home", path: "/" },
+                            { name: "Booking", path: "/booking" },
+                            { name: "Membership", path: "/membership" },
+                            { name: "Tournament", path: "/tournament" },
+                        ].map((item) => {
+                            const isActive = pathname === item.path;
+                            return (
+                                <Link
+                                    key={item.name}
+                                    href={item.path}
+                                    className={`relative px-4 py-2 rounded-full transition-all duration-300 group ${isActive ? "text-white" : "text-zinc-400 hover:text-zinc-100"
+                                        }`}
+                                >
+                                    {isActive && (
+                                        <div className="absolute inset-0 bg-white/10 border border-white/10 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.05)] backdrop-blur-md"></div>
+                                    )}
+                                    <span className="relative z-10">{item.name}</span>
+
+                                    {/* Subtle hover effect for inactive items */}
+                                    {!isActive && (
+                                        <span className="absolute bottom-1.5 left-1/2 w-0 h-[2px] bg-white/30 transition-all duration-300 group-hover:w-1/2 group-hover:left-1/4 opacity-0 group-hover:opacity-100 rounded-full blur-[1px]"></span>
+                                    )}
+                                </Link>
+                            );
+                        })}
                     </nav>
 
                     {/* Actions - Enterprise Buttons */}

@@ -159,13 +159,14 @@ export default async function ProfilePage({ searchParams }: { searchParams: { ta
                                     <div className="w-16 h-16 bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-4 border border-zinc-800">
                                         <Calendar className="w-8 h-8 text-zinc-600" />
                                     </div>
-                                    <h3 className="text-xl font-bold text-white mb-2">Belum Ada Booking</h3>
-                                    <p className="text-zinc-500 mb-6 max-w-md mx-auto">
-                                        Anda belum pernah melakukan reservasi meja. Yuk, booking meja sekarang dan nikmati permainannya!
-                                    </p>
-                                    <Button asChild className="bg-emerald-600 hover:bg-emerald-500">
-                                        <Link href="/reservasi">Booking Meja</Link>
-                                    </Button>
+                                    <div className="text-center p-8 border border-dashed border-zinc-800 rounded-xl space-y-3">
+                                        <p className="text-zinc-500 text-sm max-w-sm mx-auto">
+                                            Anda belum pernah melakukan booking meja. Yuk, booking meja sekarang dan nikmati permainannya!
+                                        </p>
+                                        <Button asChild className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full">
+                                            <Link href="/booking">Booking Meja</Link>
+                                        </Button>
+                                    </div>
                                 </div>
                             )}
                         </div>

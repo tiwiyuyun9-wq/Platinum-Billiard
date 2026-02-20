@@ -94,7 +94,7 @@ export async function createBooking(formData: FormData) {
         return { error: "Failed to create booking. Please try again." };
     }
 
-    revalidatePath('/reservasi');
+    revalidatePath('/booking');
     return { success: true, message: "Booking Berhasil! Silakan lanjut ke pembayaran.", booking: data };
 }
 
@@ -111,6 +111,6 @@ export async function confirmPayment(bookingId: string) {
         return { error: "Gagal mengkonfirmasi pembayaran." };
     }
 
-    revalidatePath('/reservasi');
+    revalidatePath('/booking');
     return { success: true };
 }

@@ -13,7 +13,20 @@ export function Footer() {
         <footer className="w-full bg-zinc-950 border-t border-zinc-900 text-zinc-400 py-16">
             <div className="container mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
                 <div className="space-y-6">
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-zinc-100 to-zinc-500 bg-clip-text text-transparent">Platinum Billiard</h3>
+                    {/* Footer Logo - Matched with Header */}
+                    <Link href="/" className="flex items-center space-x-3 shrink-0 group w-fit">
+                        <div className="bg-gradient-to-br from-zinc-100 to-zinc-600 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-zinc-500/10 transition-transform group-hover:scale-105 group-hover:shadow-zinc-500/20">
+                            <span className="text-zinc-950 font-extrabold text-xl leading-none pt-0.5 font-serif">P</span>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-lg font-bold bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent tracking-tight leading-none">
+                                Platinum
+                            </span>
+                            <span className="text-[10px] tracking-[0.2em] text-zinc-500 uppercase font-semibold">
+                                Billiard
+                            </span>
+                        </div>
+                    </Link>
                     <p className="text-sm leading-relaxed text-zinc-500">
                         Destinasi utama bagi pecinta billiard yang mengutamakan kualitas, kenyamanan, dan privasi.
                     </p>
