@@ -29,8 +29,6 @@ export function Header() {
     const [authOpen, setAuthOpen] = useState(false);
     const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
-    if (pathname?.startsWith("/admin")) return null;
-
     useEffect(() => {
         const supabase = createClient();
 
@@ -92,6 +90,8 @@ export function Header() {
         gold: "bg-amber-400 text-amber-950 border-amber-500",
         platinum: "bg-zinc-100 text-zinc-950 border-white shadow-[0_0_10px_rgba(255,255,255,0.4)]",
     };
+
+    if (pathname?.startsWith("/admin")) return null;
 
     return (
         <header className="fixed top-0 z-50 w-full pt-6 px-4 pr-[calc(1rem+var(--removed-body-scroll-bar-size,0px))] transition-[padding]">
