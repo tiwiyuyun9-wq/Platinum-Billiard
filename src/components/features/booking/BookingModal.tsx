@@ -13,9 +13,6 @@ import { createBooking, confirmPayment } from "@/app/booking/actions";
 import { CalendarIcon, Clock, CheckCircle, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { createClient } from "@/utils/supabase/client";
-import { AuthModal } from "@/components/auth/AuthModal";
-import { toast } from "sonner";
 
 interface BookingModalProps {
     isOpen: boolean;
@@ -30,7 +27,6 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
     const [duration, setDuration] = useState<string>("1");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [authOpen, setAuthOpen] = useState(false);
 
     const [bookingId, setBookingId] = useState<string | null>(null);
 
@@ -51,16 +47,6 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
-
-        const supabase = createClient();
-        const { data: { user } } = await supabase.auth.getUser();
-
-        if (!user) {
-            setIsLoading(false);
-            toast.error("Silakan Masuk atau Daftar terlebih dahulu untuk melakukan booking.");
-            setAuthOpen(true);
-            return;
-        }
 
         const formData = new FormData();
         formData.append('tableId', table!.id);
@@ -250,12 +236,6 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
                     </div>
                 )}
             </DialogContent>
-
-            <AuthModal
-                open={authOpen}
-                onOpenChange={setAuthOpen}
-                defaultMode="login"
-            />
         </Dialog>
     );
 }

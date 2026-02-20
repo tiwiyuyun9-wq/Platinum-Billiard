@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TableCard } from "@/components/features/tables/TableCard";
 import { Info } from "lucide-react";
 import { BookingModal } from "@/components/features/booking/BookingModal";
 import { getStorageUrl } from "@/utils/supabase/storage";
+import { createClient } from "@/utils/supabase/client";
+import { AuthModal } from "@/components/auth/AuthModal";
+import { toast } from "sonner";
+import { User } from "@supabase/supabase-js";
 
 
 // Mock Data - Adjusted to Night Rates (Standard)
@@ -25,8 +29,30 @@ export default function BookingPage() {
     const [selectedTable, setSelectedTable] = useState<{ id: string; name: string; price: number } | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterMode, setFilterMode] = useState<'all' | 'available'>('all');
+    const [user, setUser] = useState<User | null>(null);
+    const [authOpen, setAuthOpen] = useState(false);
+
+    useEffect(() => {
+        const supabase = createClient();
+        const fetchUser = async () => {
+             const { data: { user } } = await supabase.auth.getUser();
+             setUser(user);
+        };
+        fetchUser();
+        
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+             setUser(session?.user ?? null);
+        });
+        
+        return () => subscription.unsubscribe();
+    }, []);
 
     const handleBook = (id: string) => {
+        if (!user) {
+             toast.error("Silakan Masuk atau Daftar terlebih dahulu untuk melakukan booking.");
+             setAuthOpen(true);
+             return;
+        }
         const table = MOCK_TABLES.find(t => t.id === id);
         if (table) {
             setSelectedTable(table);
@@ -120,6 +146,12 @@ export default function BookingPage() {
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     table={selectedTable}
+                />
+                
+                <AuthModal
+                    open={authOpen}
+                    onOpenChange={setAuthOpen}
+                    defaultMode="login"
                 />
             </div>
         </main>
