@@ -86,7 +86,7 @@ export function AuthModal({ trigger, defaultMode = "login", open, onOpenChange }
     };
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={onOpenChange} modal={false}>
             {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
             <DialogContent className="sm:max-w-[400px] p-0 bg-zinc-950 border-zinc-800 text-zinc-100 overflow-hidden font-sans">
                 <div className="p-6 space-y-6">
