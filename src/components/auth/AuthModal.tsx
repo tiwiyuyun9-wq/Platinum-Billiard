@@ -48,14 +48,32 @@ export function AuthModal({ trigger, defaultMode = "login", open, onOpenChange }
 
         try {
             if (mode === "login") {
-                const { error } = await supabase.auth.signInWithPassword({
+                const { data, error } = await supabase.auth.signInWithPassword({
                     email,
                     password,
                 });
                 if (error) throw error;
+
+                const user = data.user;
+                let isAdmin = false;
+
+                if (user) {
+                    const { data: profile } = await supabase
+                        .from("profiles")
+                        .select("role")
+                        .eq("id", user.id)
+                        .single();
+                    isAdmin = profile?.role === 'admin' || user.email === 'admin@platinumbilliard.com' || user.user_metadata?.role === 'admin';
+                }
+
                 toast.success("Berhasil masuk!");
-                router.refresh();
                 if (onOpenChange) onOpenChange(false);
+
+                if (isAdmin) {
+                    router.push("/admin");
+                } else {
+                    router.refresh();
+                }
             } else {
                 const { error } = await supabase.auth.signUp({
                     email,
