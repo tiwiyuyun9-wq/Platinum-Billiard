@@ -11,7 +11,7 @@ export async function getUserMembership(userId: string): Promise<Membership | nu
         // In case of multiple active memberships, take the one ending latest
         .order("end_date", { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
     if (error && error.code !== 'PGRST116') {
         console.error("Error fetching membership:", error);

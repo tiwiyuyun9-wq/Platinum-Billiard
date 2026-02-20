@@ -61,7 +61,7 @@ export function Header() {
                 .eq("is_active", true)
                 .order("end_date", { ascending: false })
                 .limit(1)
-                .single();
+                .maybeSingle();
 
             if (data) {
                 setMembership(data as Membership);

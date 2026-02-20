@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { TableCard } from "@/components/features/tables/TableCard";
-import { Info } from "lucide-react";
+import { Info, Loader2 } from "lucide-react";
 import { BookingModal } from "@/components/features/booking/BookingModal";
 import { getStorageUrl } from "@/utils/supabase/storage";
 import { createClient } from "@/utils/supabase/client";
@@ -10,23 +10,19 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { toast } from "sonner";
 import { User } from "@supabase/supabase-js";
 
-
-// Mock Data - Adjusted to Night Rates (Standard)
-const MOCK_TABLES = [
-    // Rasson Tables (1-4)
-    { id: "1", name: "Meja Rasson 01", status: "available", price: 35000, imageUrl: getStorageUrl('tables/rasson-1.jpg') },
-    { id: "2", name: "Meja Rasson 02", status: "occupied", price: 35000, timePlayedStart: new Date(Date.now() - 45 * 60 * 1000).toISOString(), bookedUntil: "21:30 WIB", imageUrl: getStorageUrl('tables/rasson-2.jpg') },
-    { id: "3", name: "Meja Rasson 03", status: "booked", price: 35000, bookedUntil: "Mulai 20:00 WIB", imageUrl: getStorageUrl('tables/rasson-3.jpg') },
-    { id: "4", name: "Meja Rasson 04", status: "available", price: 35000, imageUrl: getStorageUrl('tables/rasson-4.jpg') },
-    // Biasa Tables (5-8)
-    { id: "5", name: "Meja Biasa 01", status: "available", price: 30000, imageUrl: getStorageUrl('tables/biasa-1.webp') },
-    { id: "6", name: "Meja Biasa 02", status: "available", price: 30000, imageUrl: getStorageUrl('tables/biasa-2.webp') },
-    { id: "7", name: "Meja Biasa 03", status: "occupied", price: 30000, timePlayedStart: new Date(Date.now() - 75 * 60 * 1000).toISOString(), bookedUntil: "22:00 WIB", imageUrl: getStorageUrl('tables/biasa-3.webp') },
-    { id: "8", name: "Meja Biasa 04", status: "available", price: 30000, imageUrl: getStorageUrl('tables/biasa-4.webp') },
-] as const;
+interface TableData {
+    id: string;
+    name: string;
+    type: string;
+    status: string;
+    price: number;
+    imageUrl?: string;
+}
 
 export default function BookingPage() {
-    const [selectedTable, setSelectedTable] = useState<{ id: string; name: string; price: number } | null>(null);
+    const [tables, setTables] = useState<TableData[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectedTable, setSelectedTable] = useState<TableData | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [filterMode, setFilterMode] = useState<'all' | 'available'>('all');
     const [user, setUser] = useState<User | null>(null);
@@ -34,26 +30,46 @@ export default function BookingPage() {
 
     useEffect(() => {
         const supabase = createClient();
+
         const fetchUser = async () => {
-             const { data: { user } } = await supabase.auth.getUser();
-             setUser(user);
+            const { data: { user } } = await supabase.auth.getUser();
+            setUser(user);
         };
         fetchUser();
-        
+
+        const fetchTables = async () => {
+            setIsLoading(true);
+            const { data, error } = await supabase.from('tables').select('*').order('name');
+            if (error) {
+                console.error("Error fetching tables:", error);
+                toast.error("Gagal memuat daftar meja.");
+            } else if (data) {
+                // Determine price and image based on type for display
+                const formattedTables = data.map(t => ({
+                    ...t,
+                    price: t.type === 'rasson' ? 35000 : 30000,
+                    imageUrl: getStorageUrl(`tables/${t.type === 'rasson' ? 'rasson-1.jpg' : 'biasa-1.webp'}`)
+                }));
+                setTables(formattedTables);
+            }
+            setIsLoading(false);
+        };
+        fetchTables();
+
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-             setUser(session?.user ?? null);
+            setUser(session?.user ?? null);
         });
-        
+
         return () => subscription.unsubscribe();
     }, []);
 
     const handleBook = (id: string) => {
         if (!user) {
-             toast.error("Silakan Masuk atau Daftar terlebih dahulu untuk melakukan booking.");
-             setAuthOpen(true);
-             return;
+            toast.error("Silakan Masuk atau Daftar terlebih dahulu untuk melakukan booking.");
+            setAuthOpen(true);
+            return;
         }
-        const table = MOCK_TABLES.find(t => t.id === id);
+        const table = tables.find(t => t.id === id);
         if (table) {
             setSelectedTable(table);
             setIsModalOpen(true);
@@ -61,8 +77,8 @@ export default function BookingPage() {
     };
 
     const displayedTables = filterMode === 'all'
-        ? MOCK_TABLES
-        : MOCK_TABLES.filter(t => t.status === 'available');
+        ? tables
+        : tables.filter(t => t.status === 'available');
 
     return (
         <main className="min-h-screen bg-zinc-950 text-zinc-50 pt-28 sm:pt-40 pb-20">
@@ -132,22 +148,34 @@ export default function BookingPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-8 pb-10">
-                    {displayedTables.map((table) => (
-                        <TableCard
-                            key={table.id}
-                            {...table}
-                            onBook={(id) => handleBook(id)}
-                        />
-                    ))}
-                </div>
+                {isLoading ? (
+                    <div className="flex justify-center items-center py-20">
+                        <Loader2 className="w-10 h-10 animate-spin text-emerald-500" />
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-8 pb-10">
+                        {displayedTables.map((table) => (
+                            <TableCard
+                                key={table.id}
+                                id={table.id}
+                                name={table.name}
+                                status={table.status as any}
+                                price={table.price}
+                                imageUrl={table.imageUrl || ''}
+                                timePlayedStart={table.status === 'occupied' ? new Date().toISOString() : undefined}
+                                bookedUntil={table.status === 'booked' ? "20:00 WIB" : undefined}
+                                onBook={(id) => handleBook(id)}
+                            />
+                        ))}
+                    </div>
+                )}
 
                 <BookingModal
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     table={selectedTable}
                 />
-                
+
                 <AuthModal
                     open={authOpen}
                     onOpenChange={setAuthOpen}

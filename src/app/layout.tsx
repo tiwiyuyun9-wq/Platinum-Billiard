@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className="dark" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <div className="flex min-h-screen flex-col">
           <Header />
           <div className="flex-1 pb-20 md:pb-0">{children}</div>
