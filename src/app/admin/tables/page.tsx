@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import {
     DndContext,
@@ -51,17 +51,17 @@ export default function TableManagementPage() {
         })
     );
 
-    const fetchTables = useCallback(async () => {
-        const { data, error } = await supabase.from("tables").select("*").order("name");
-        if (error) {
-            toast.error("Gagal memuat data meja");
-            return;
-        }
-        setTables(data as Table[]);
-        setIsLoading(false);
-    }, [supabase]);
-
     useEffect(() => {
+        const fetchTables = async () => {
+            const { data, error } = await supabase.from("tables").select("*").order("name");
+            if (error) {
+                toast.error("Gagal memuat data meja");
+                return;
+            }
+            setTables(data as Table[]);
+            setIsLoading(false);
+        };
+
         fetchTables();
 
         // Realtime subscription
@@ -85,7 +85,7 @@ export default function TableManagementPage() {
         return () => {
             supabase.removeChannel(channel);
         };
-    }, [supabase, fetchTables]);
+    }, [supabase]);
 
     const handleDragStart = (event: DragStartEvent) => {
         setActiveId(event.active.id as string);
@@ -96,7 +96,7 @@ export default function TableManagementPage() {
         if (!over) return;
 
         const activeId = active.id;
-        const overId = over.id;
+        // const overId = over.id; // Unused for now
 
         // Find the containers
         const activeTable = tables.find((t) => t.id === activeId);
@@ -104,11 +104,11 @@ export default function TableManagementPage() {
         if (!activeTable) return;
 
         // Over a column?
-        const overColumn = COLUMNS.find(c => c.id === overId);
-        if (overColumn && activeTable.status !== overColumn.id) {
-            // We'll handle the optimistic update in DragEnd usually or here for visuals
-            // For simplicity in this V1, let's just allow dropping on column or other items
-        }
+        // const overColumn = COLUMNS.find(c => c.id === overId); // Unused
+        // if (overColumn && activeTable.status !== overColumn.id) {
+        //     // We'll handle the optimistic update in DragEnd usually or here for visuals
+        //     // For simplicity in this V1, let's just allow dropping on column or other items
+        // }
     };
 
     const handleDragEnd = async (event: DragEndEvent) => {
@@ -123,6 +123,7 @@ export default function TableManagementPage() {
         const activeTable = tables.find((t) => t.id === activeId);
         if (!activeTable) return;
 
+        const oldStatus = activeTable.status; // Capture old status for revert
         let newStatus: TableStatus | null = null;
 
         // Dropped over a column directly
@@ -137,7 +138,7 @@ export default function TableManagementPage() {
             }
         }
 
-        if (newStatus && newStatus !== activeTable.status) {
+        if (newStatus && newStatus !== oldStatus) {
             // Optimistic Update
             setTables((prev) =>
                 prev.map((t) =>
@@ -153,8 +154,12 @@ export default function TableManagementPage() {
 
             if (error) {
                 toast.error("Gagal update status meja");
-                // Revert
-                fetchTables();
+                // Revert locally
+                setTables((prev) =>
+                    prev.map((t) =>
+                        t.id === activeId ? { ...t, status: oldStatus } : t
+                    )
+                );
             } else {
                 toast.success(`Meja dipindah ke ${newStatus}`);
             }
