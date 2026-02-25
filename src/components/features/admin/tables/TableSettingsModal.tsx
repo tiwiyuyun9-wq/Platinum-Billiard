@@ -155,9 +155,10 @@ export function TableSettingsModal({ open, onOpenChange, table, onSuccess }: Tab
 
             onSuccess();
             onOpenChange(false);
-        } catch (error: any) {
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : "Terjadi kesalahan yang tidak diketahui";
             toast.error(isEditMode ? "Gagal memperbarui meja" : "Gagal menambahkan meja", {
-                description: error.message
+                description: errorMessage
             });
         } finally {
             setIsLoading(false);

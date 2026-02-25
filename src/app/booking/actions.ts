@@ -101,7 +101,7 @@ export async function createBooking(formData: FormData) {
 export async function confirmPayment(bookingId: string, paymentProofUrl?: string) {
     const supabase = await createClient();
 
-    const updateData: any = { status: 'waiting_confirmation' };
+    const updateData: { status: string; payment_proof_url?: string } = { status: 'waiting_confirmation' };
     if (paymentProofUrl) {
         updateData.payment_proof_url = paymentProofUrl;
     }

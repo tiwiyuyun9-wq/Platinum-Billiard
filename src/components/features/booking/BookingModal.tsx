@@ -122,9 +122,10 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
             } else {
                 setStep('success');
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("Payment Confirmation Error:", err);
-            setError(err.message || "Gagal mengkonfirmasi pembayaran.");
+            const errorMessage = err instanceof Error ? err.message : "Gagal mengkonfirmasi pembayaran.";
+            setError(errorMessage);
         } finally {
             setIsLoading(false);
         }

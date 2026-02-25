@@ -46,7 +46,7 @@ export default function PaymentVerificationPage() {
             } else {
                 // Fetch user profiles separately if needed or via join if relation exists
                 // Assuming bookings has user_id, we can fetch profiles
-                let profiles: any[] = [];
+                let profiles: { id: string; full_name: string; email: string }[] = [];
                 if (data.length > 0) {
                     const userIds = data.map(b => b.user_id);
                     const { data: profilesData } = await supabase.from("profiles").select("id, full_name, email").in("id", userIds);

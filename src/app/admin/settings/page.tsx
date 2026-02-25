@@ -89,9 +89,10 @@ export default function AdminSettingsPage() {
             setFile(null); // Reset file selection after successful save
             toast.success("Pengaturan QRIS berhasil disimpan!");
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Save error:", error);
-            toast.error(error.message || "Gagal menyimpan pengaturan.");
+            const errorMessage = error instanceof Error ? error.message : "Gagal menyimpan pengaturan.";
+            toast.error(errorMessage);
         } finally {
             setIsSaving(false);
         }

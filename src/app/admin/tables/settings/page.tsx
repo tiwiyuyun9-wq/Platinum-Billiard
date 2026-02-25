@@ -41,9 +41,10 @@ export default function TableSettingsPage() {
 
             if (error) throw error;
             setTables(data || []);
-        } catch (error: any) {
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : "Terjadi kesalahan";
             toast.error("Gagal memuat data meja", {
-                description: error.message
+                description: errorMessage
             });
         } finally {
             setIsLoading(false);
@@ -72,9 +73,10 @@ export default function TableSettingsPage() {
             if (error) throw error;
             toast.success("Meja berhasil dihapus!");
             fetchTables();
-        } catch (error: any) {
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : "Terjadi kesalahan";
             toast.error("Gagal menghapus meja", {
-                description: error.message
+                description: errorMessage
             });
         }
     };
@@ -174,7 +176,7 @@ export default function TableSettingsPage() {
                             {tables.length === 0 && (
                                 <tr>
                                     <td colSpan={6} className="px-6 py-12 text-center text-zinc-500">
-                                        Belum ada data meja. Klik "Tambah Meja" untuk memulai.
+                                        Belum ada data meja. Klik &quot;Tambah Meja&quot; untuk memulai.
                                     </td>
                                 </tr>
                             )}
