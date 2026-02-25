@@ -22,8 +22,26 @@ export async function login(formData: FormData) {
         return redirect('/login?error=Could not authenticate user')
     }
 
+    const { data: { user } } = await supabase.auth.getUser()
+    let isAdmin = false
+
+    if (user) {
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single()
+
+        isAdmin = profile?.role === 'admin' || user.email === 'admin@platinumbilliard.com' || user.user_metadata?.role === 'admin'
+    }
+
     revalidatePath('/', 'layout')
-    redirect('/')
+
+    if (isAdmin) {
+        redirect('/admin')
+    } else {
+        redirect('/')
+    }
 }
 
 export async function signup(formData: FormData) {
@@ -51,5 +69,5 @@ export async function signup(formData: FormData) {
     }
 
     revalidatePath('/', 'layout')
-    redirect('/login?message=Check email to continue sign in process')
+    redirect('/profile?message=Registrasi berhasil. Selamat datang!')
 }

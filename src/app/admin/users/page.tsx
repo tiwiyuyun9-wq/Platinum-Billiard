@@ -18,7 +18,6 @@ import { Search } from "lucide-react";
 interface User {
     id: string;
     full_name: string;
-    email: string;
     role: string;
     avatar_url: string;
     memberships?: { tier: string; is_active: boolean }[];
@@ -44,7 +43,7 @@ export default function UsersPage() {
                 .limit(50);
 
             if (error) {
-                console.error("Error fetching users:", error);
+                console.error("Error fetching users:", error.message || error);
             } else if (data) {
                 setUsers(data as User[]);
             }
@@ -55,8 +54,7 @@ export default function UsersPage() {
     }, [supabase]);
 
     const filteredUsers = users.filter(u =>
-        u.full_name?.toLowerCase().includes(search.toLowerCase()) ||
-        u.email?.toLowerCase().includes(search.toLowerCase())
+        u.full_name?.toLowerCase().includes(search.toLowerCase())
     );
 
     return (
@@ -79,7 +77,6 @@ export default function UsersPage() {
                     <TableHeader>
                         <TableRow className="border-zinc-800 hover:bg-transparent">
                             <TableHead className="text-zinc-400">User</TableHead>
-                            <TableHead className="text-zinc-400">Email</TableHead>
                             <TableHead className="text-zinc-400">Role</TableHead>
                             <TableHead className="text-zinc-400">Membership</TableHead>
                             <TableHead className="text-zinc-400">Status</TableHead>
@@ -104,7 +101,6 @@ export default function UsersPage() {
                                             </Avatar>
                                             {user.full_name}
                                         </TableCell>
-                                        <TableCell className="text-zinc-400">{user.email}</TableCell>
                                         <TableCell className="text-zinc-400 capitalize">{user.role || "user"}</TableCell>
                                         <TableCell>
                                             {activeMembership ? (

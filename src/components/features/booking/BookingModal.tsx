@@ -13,6 +13,7 @@ import { createBooking, confirmPayment } from "@/app/booking/actions";
 import { CalendarIcon, Clock, CheckCircle, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { createClient } from "@/utils/supabase/client";
 
 interface BookingModalProps {
     isOpen: boolean;
@@ -21,7 +22,7 @@ interface BookingModalProps {
 }
 
 export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
-    const [step, setStep] = useState<'details' | 'payment' | 'success'>('details');
+    const [step, setStep] = useState<'details' | 'payment' | 'payment_proof' | 'success'>('details');
     const [date, setDate] = useState<Date | undefined>(new Date());
     const [time, setTime] = useState<string>("19:00");
     const [duration, setDuration] = useState<string>("1");
@@ -29,6 +30,10 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
     const [error, setError] = useState<string | null>(null);
 
     const [bookingId, setBookingId] = useState<string | null>(null);
+    const [qrisUrl, setQrisUrl] = useState<string | null>(null);
+    const [proofFile, setProofFile] = useState<File | null>(null);
+    const [proofPreview, setProofPreview] = useState<string | null>(null);
+    const supabase = createClient();
 
     if (!table) return null;
 
@@ -69,22 +74,59 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
             // For v1, we assume they pay at counter or transfer manually. 
             // Ideally we show QRIS here.
             setStep('payment');
+            // Fetch dynamic QRIS URL
+            const { data } = await supabase
+                .from("settings")
+                .select("qris_image_url")
+                .eq("id", 1)
+                .single();
+            if (data?.qris_image_url) {
+                setQrisUrl(data.qris_image_url);
+            }
         }
     }
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const selectedFile = e.target.files[0];
+            setProofFile(selectedFile);
+            setProofPreview(URL.createObjectURL(selectedFile));
+        }
+    };
+
     const handlePaymentSubmit = async () => {
-        if (!bookingId) return;
+        if (!bookingId || !proofFile) return;
 
         setIsLoading(true);
-        // Here we would upload the file and update booking status
-        // For now, just simulate success and update status
-        const result = await confirmPayment(bookingId);
-        setIsLoading(false);
+        setError(null);
 
-        if (result?.error) {
-            setError(result.error);
-        } else {
-            setStep('success');
+        try {
+            const fileExt = proofFile.name.split('.').pop();
+            const fileName = `proof-${bookingId}-${Date.now()}.${fileExt}`;
+            const filePath = `payment-proofs/${fileName}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('web-assets')
+                .upload(filePath, proofFile);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('web-assets')
+                .getPublicUrl(filePath);
+
+            const result = await confirmPayment(bookingId, publicUrl);
+
+            if (result?.error) {
+                setError(result.error);
+            } else {
+                setStep('success');
+            }
+        } catch (err: any) {
+            console.error("Payment Confirmation Error:", err);
+            setError(err.message || "Gagal mengkonfirmasi pembayaran.");
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -95,11 +137,13 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
                     <DialogTitle className="text-xl font-bold text-white">
                         {step === 'details' && `Booking ${table.name}`}
                         {step === 'payment' && "Pembayaran"}
+                        {step === 'payment_proof' && "Upload Bukti Transfer"}
                         {step === 'success' && "Booking Berhasil!"}
                     </DialogTitle>
                     <DialogDescription className="text-zinc-400">
                         {step === 'details' && "Pilih jadwal bermain Anda."}
                         {step === 'payment' && "Silakan transfer sesuai nominal di bawah."}
+                        {step === 'payment_proof' && "Upload foto persetujuan transfer Anda."}
                         {step === 'success' && "Terima kasih! Sampai jumpa di lokasi."}
                     </DialogDescription>
                 </DialogHeader>
@@ -198,26 +242,81 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
                             </h3>
 
                             <div className="bg-white p-4 rounded-lg inline-block mb-4">
-                                {/* Placeholder QRIS */}
-                                <div className="w-48 h-48 bg-zinc-200 flex items-center justify-center text-zinc-900 font-bold">
-                                    QRIS CODE
-                                </div>
+                                {/* Dynamic QRIS */}
+                                {qrisUrl ? (
+                                    <div className="w-48 h-48 bg-transparent flex items-center justify-center overflow-hidden">
+                                        <img src={qrisUrl} alt="Scan QRIS untuk membayar" className="w-full h-full object-contain" />
+                                    </div>
+                                ) : (
+                                    <div className="w-48 h-48 bg-zinc-200 flex items-center justify-center text-zinc-900 font-bold">
+                                        QRIS CODE
+                                    </div>
+                                )}
                             </div>
                             <p className="text-sm text-zinc-500">Scan QRIS di atas untuk membayar</p>
-                            <p className="text-xs text-zinc-600 mt-1">BCA a.n Billiard Enterprise<br />123 456 7890</p>
+                            <p className="text-xs text-zinc-600 mt-1">Sistem Otomatis Billiard Enterprise</p>
+                        </div>
+
+                        <Button
+                            onClick={() => setStep('payment_proof')}
+                            className="w-full bg-emerald-600 hover:bg-emerald-700"
+                        >
+                            Lanjut Upload Bukti
+                        </Button>
+                    </div>
+                )}
+
+                {step === 'payment_proof' && (
+                    <div className="space-y-6 py-4">
+                        <div className="bg-zinc-900 p-6 rounded-xl border border-zinc-800 text-center">
+                            <p className="text-zinc-400 mb-2">Total Pembayaran</p>
+                            <h3 className="text-3xl font-bold text-emerald-400 mb-2">
+                                {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(estimatedPrice)}
+                            </h3>
                         </div>
 
                         <div className="space-y-2">
-                            <Label>Upload Bukti Transfer (Opsional)</Label>
-                            <div className="border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center hover:bg-zinc-900/50 transition-colors cursor-pointer">
-                                <Upload className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-                                <p className="text-xs text-zinc-400">Klik untuk upload foto bukti pembayaran</p>
+                            <Label>Upload Bukti Transfer <span className="text-red-500">*</span></Label>
+                            {error && (
+                                <div className="text-red-500 text-xs mb-2">{error}</div>
+                            )}
+                            <div className="relative border-2 border-dashed border-zinc-700 rounded-lg p-6 text-center hover:bg-zinc-900/50 transition-colors cursor-pointer">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    onChange={handleFileChange}
+                                />
+                                {proofPreview ? (
+                                    <div className="flex flex-col items-center">
+                                        <img src={proofPreview} alt="Bukti Transfer" className="h-24 w-auto rounded-md object-contain mb-2" />
+                                        <p className="text-xs text-emerald-500 font-medium">Bukti berhasil dipilih, klik untuk mengubah</p>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <Upload className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
+                                        <p className="text-xs text-zinc-400">Klik untuk upload foto bukti pembayaran</p>
+                                    </>
+                                )}
                             </div>
                         </div>
 
-                        <Button onClick={handlePaymentSubmit} className="w-full bg-emerald-600 hover:bg-emerald-700">
-                            Saya Sudah Bayar
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button
+                                onClick={() => setStep('payment')}
+                                variant="outline"
+                                className="w-1/3 border-zinc-700 text-zinc-300 hover:text-white hover:bg-zinc-800"
+                            >
+                                Kembali
+                            </Button>
+                            <Button
+                                onClick={handlePaymentSubmit}
+                                disabled={!proofFile || isLoading}
+                                className="w-2/3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isLoading ? "Memproses..." : "Konfirmasi Pembayaran"}
+                            </Button>
+                        </div>
                     </div>
                 )}
 

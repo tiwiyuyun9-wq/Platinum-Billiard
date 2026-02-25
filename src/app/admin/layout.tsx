@@ -11,7 +11,7 @@ export default async function AdminLayout({
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        redirect("/auth?mode=login&next=/admin");
+        redirect("/login?next=/admin");
     }
 
     // Role verification (Simple implementation for now)

@@ -9,7 +9,8 @@ import {
     CreditCard,
     BarChart3,
     LogOut,
-    Users
+    Users,
+    Settings
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
@@ -36,9 +37,13 @@ const sidebarItems = [
         icon: BarChart3,
     },
     {
-        title: "Users & Member",
         href: "/admin/users",
         icon: Users,
+    },
+    {
+        title: "Pengaturan",
+        href: "/admin/settings",
+        icon: Settings,
     },
 ];
 

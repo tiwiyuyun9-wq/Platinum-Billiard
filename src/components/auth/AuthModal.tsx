@@ -93,8 +93,10 @@ export function AuthModal({ trigger, defaultMode = "login", open, onOpenChange }
                     },
                 });
                 if (error) throw error;
-                toast.success("Registrasi berhasil! Silakan cek email Anda.");
+                toast.success("Registrasi berhasil! Mengalihkan ke dashboard...");
                 if (onOpenChange) onOpenChange(false);
+                router.push("/profile");
+                router.refresh();
             }
         } catch (err: unknown) {
             const message = err instanceof Error ? err.message : "An unknown error occurred";

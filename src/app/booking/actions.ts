@@ -98,12 +98,17 @@ export async function createBooking(formData: FormData) {
     return { success: true, message: "Booking Berhasil! Silakan lanjut ke pembayaran.", booking: data };
 }
 
-export async function confirmPayment(bookingId: string) {
+export async function confirmPayment(bookingId: string, paymentProofUrl?: string) {
     const supabase = await createClient();
+
+    const updateData: any = { status: 'waiting_confirmation' };
+    if (paymentProofUrl) {
+        updateData.payment_proof_url = paymentProofUrl;
+    }
 
     const { error } = await supabase
         .from('bookings')
-        .update({ status: 'waiting_confirmation' })
+        .update(updateData)
         .eq('id', bookingId);
 
     if (error) {
