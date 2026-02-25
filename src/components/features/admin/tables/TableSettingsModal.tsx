@@ -88,7 +88,7 @@ export function TableSettingsModal({ open, onOpenChange, table, onSuccess }: Tab
         const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
         const filePath = `tables/${fileName}`; // Save in tables folder
 
-        const { error: uploadError, data } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
             .from('web-assets')
             .upload(filePath, file);
 

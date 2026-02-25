@@ -246,6 +246,7 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
                                 {/* Dynamic QRIS */}
                                 {qrisUrl ? (
                                     <div className="w-48 h-48 bg-transparent flex items-center justify-center overflow-hidden">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img src={qrisUrl} alt="Scan QRIS untuk membayar" className="w-full h-full object-contain" />
                                     </div>
                                 ) : (
@@ -290,6 +291,7 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
                                 />
                                 {proofPreview ? (
                                     <div className="flex flex-col items-center">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img src={proofPreview} alt="Bukti Transfer" className="h-24 w-auto rounded-md object-contain mb-2" />
                                         <p className="text-xs text-emerald-500 font-medium">Bukti berhasil dipilih, klik untuk mengubah</p>
                                     </div>

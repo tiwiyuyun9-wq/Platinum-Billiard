@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,11 +28,7 @@ export default function TableSettingsPage() {
     const [selectedTable, setSelectedTable] = useState<TableData | null>(null);
     const [supabase] = useState(() => createClient());
 
-    useEffect(() => {
-        fetchTables();
-    }, []);
-
-    const fetchTables = async () => {
+    const fetchTables = useCallback(async () => {
         try {
             const { data, error } = await supabase
                 .from("tables")
@@ -49,7 +45,11 @@ export default function TableSettingsPage() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [supabase]);
+
+    useEffect(() => {
+        fetchTables();
+    }, [fetchTables]);
 
     const handleOpenAddModal = () => {
         setSelectedTable(null);

@@ -131,11 +131,14 @@ export default function AdminSettingsPage() {
                         <div className="w-full md:w-1/2 flex flex-col items-center">
                             <div className="relative w-full max-w-[280px] aspect-[3/4] rounded-xl border-2 border-dashed border-zinc-700 bg-zinc-950 flex flex-col items-center justify-center overflow-hidden group">
                                 {previewUrl || savedQrisUrl ? (
-                                    <img
-                                        src={previewUrl || savedQrisUrl || ""}
-                                        alt="QRIS Preview"
-                                        className="w-full h-full object-contain p-4"
-                                    />
+                                    <>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={previewUrl || savedQrisUrl || ""}
+                                            alt="QRIS Preview"
+                                            className="w-full h-full object-contain p-4"
+                                        />
+                                    </>
                                 ) : (
                                     <div className="text-zinc-500 flex flex-col items-center p-6 text-center">
                                         <div className="w-16 h-16 bg-zinc-900 rounded-full flex items-center justify-center mb-4 text-zinc-600">
