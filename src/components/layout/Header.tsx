@@ -120,6 +120,9 @@ export function Header() {
                             { name: "Booking", path: "/booking" },
                             { name: "Membership", path: "/membership" },
                             { name: "Tournament", path: "/tournament" },
+                            { name: "Shop", path: "/shop" },
+                            { name: "Caffee", path: "/caffee" },
+                            { name: "Course", path: "/course" },
                         ].map((item) => {
                             const isActive = pathname === item.path;
                             return (
