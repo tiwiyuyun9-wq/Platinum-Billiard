@@ -221,13 +221,13 @@ export function Header() {
                                 </DropdownMenu>
                             </div>
                         ) : (
-                            <div className="flex items-center gap-2 md:gap-0 bg-transparent md:bg-zinc-900/50 rounded-full md:p-1 border-none md:border border-white/10 md:shadow-[0_0_10px_rgba(255,255,255,0.05)] md:backdrop-blur-sm">
+                            <div className="flex items-center gap-3 md:gap-3 bg-transparent">
                                 <button
                                     onClick={() => {
                                         setAuthMode("login");
                                         setAuthOpen(true);
                                     }}
-                                    className="px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-all rounded-full bg-zinc-900/80 md:bg-transparent border border-white/5 md:border-none"
+                                    className="px-5 md:px-6 py-2 text-xs md:text-sm font-medium text-zinc-300 hover:text-white transition-all rounded-full border border-white/5 hover:border-white/20 bg-white/5 hover:bg-white/10 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] backdrop-blur-md"
                                 >
                                     Masuk
                                 </button>
@@ -236,7 +236,7 @@ export function Header() {
                                         setAuthMode("register");
                                         setAuthOpen(true);
                                     }}
-                                    className="px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm font-bold text-zinc-950 bg-gradient-to-tr from-white to-zinc-200 hover:to-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.1)] md:shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all md:scale-105"
+                                    className="px-6 md:px-7 py-2 text-xs md:text-sm font-bold text-zinc-950 bg-gradient-to-tr from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all transform hover:-translate-y-0.5"
                                 >
                                     Daftar
                                 </button>
