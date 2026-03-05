@@ -7,6 +7,7 @@ import { MembershipPaymentModal } from "@/components/features/membership/Members
 import { DowngradeConfirmationModal } from "@/components/features/membership/DowngradeConfirmationModal";
 
 interface MembershipPlansClientProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     user: any;
     currentTierName: string | null;
     membershipTiers: readonly {

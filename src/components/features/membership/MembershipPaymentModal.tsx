@@ -12,6 +12,7 @@ interface MembershipPaymentModalProps {
     onClose: () => void;
     tier: string | null;
     price: string | null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     user: any;
 }
 

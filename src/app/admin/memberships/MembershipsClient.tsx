@@ -14,7 +14,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 
 interface MembershipClientProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     pendingMemberships: any[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     activeMemberships: any[];
 }
 
@@ -293,8 +295,8 @@ export default function MembershipsClient({ pendingMemberships, activeMembership
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <Badge variant="outline" className={`uppercase tracking-wider text-[10px] font-bold ${member.tier === 'platinum' ? 'bg-zinc-100 text-zinc-900 border-zinc-300' :
-                                                            member.tier === 'gold' ? 'bg-amber-500/10 text-amber-500 border-amber-500/50' :
-                                                                'bg-slate-500/10 text-slate-400 border-slate-500/50'
+                                                        member.tier === 'gold' ? 'bg-amber-500/10 text-amber-500 border-amber-500/50' :
+                                                            'bg-slate-500/10 text-slate-400 border-slate-500/50'
                                                         }`}>
                                                         {member.tier}
                                                     </Badge>

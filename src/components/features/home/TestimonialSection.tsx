@@ -48,6 +48,7 @@ export interface ReviewData {
 
 interface TestimonialSectionProps {
     reviews?: ReviewData[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     user?: any | null;
 }
 
@@ -183,7 +184,7 @@ export function TestimonialSection({ reviews = [], user = null }: TestimonialSec
                                     </div>
 
                                     <p className="text-zinc-300 leading-relaxed font-light">
-                                        "{rev.content}"
+                                        &quot;{rev.content}&quot;
                                     </p>
 
                                     <div className="flex items-center gap-6 mt-5">
