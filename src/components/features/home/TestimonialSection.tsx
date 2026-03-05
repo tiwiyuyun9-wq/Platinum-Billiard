@@ -16,6 +16,9 @@ const mockTestimonials = [
         rating: 4,
         avatar: "CR",
         created_at: new Date(Date.now() - 11 * 30 * 24 * 60 * 60 * 1000).toISOString(),
+        admin_reply: null,
+        admin_reply_at: null,
+        media_urls: [],
     },
     {
         name: "Denmas Idin",
@@ -24,6 +27,9 @@ const mockTestimonials = [
         rating: 5,
         avatar: "DI",
         created_at: new Date(Date.now() - 3 * 365 * 24 * 60 * 60 * 1000).toISOString(),
+        admin_reply: "Terima kasih banyak atas kunjungannya kak! Ditunggu kedatangannya kembali. 🙏",
+        admin_reply_at: new Date(Date.now() - 2 * 365 * 24 * 60 * 60 * 1000).toISOString(),
+        media_urls: [],
     },
     {
         name: "Budi Santoso",
@@ -32,6 +38,9 @@ const mockTestimonials = [
         rating: 5,
         avatar: "BS",
         created_at: new Date(Date.now() - 2 * 30 * 24 * 60 * 60 * 1000).toISOString(),
+        admin_reply: null,
+        admin_reply_at: null,
+        media_urls: [],
     },
 ];
 
@@ -40,6 +49,9 @@ export interface ReviewData {
     rating: number;
     content: string;
     created_at?: string;
+    admin_reply?: string | null;
+    admin_reply_at?: string | null;
+    media_urls?: string[];
     profiles: {
         full_name: string;
         role: string | null;
@@ -72,7 +84,10 @@ export function TestimonialSection({ reviews = [], user = null }: TestimonialSec
             content: r.content,
             rating: r.rating,
             avatar: r.profiles?.full_name ? r.profiles.full_name.charAt(0).toUpperCase() : "U",
-            created_at: r.created_at || new Date().toISOString()
+            created_at: r.created_at || new Date().toISOString(),
+            admin_reply: r.admin_reply || null,
+            admin_reply_at: r.admin_reply_at || null,
+            media_urls: r.media_urls || [],
         }))
         : mockTestimonials;
 
@@ -186,6 +201,36 @@ export function TestimonialSection({ reviews = [], user = null }: TestimonialSec
                                     <p className="text-zinc-300 leading-relaxed font-light">
                                         &quot;{rev.content}&quot;
                                     </p>
+
+                                    {rev.media_urls && rev.media_urls.length > 0 && (
+                                        <div className="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-none">
+                                            {rev.media_urls.map((url, idx) => (
+                                                <div key={idx} className="relative w-24 h-24 rounded-lg bg-zinc-800 border border-zinc-700/50 overflow-hidden shrink-0">
+                                                    {url.includes('.mp4') || url.includes('.webm') || url.includes('.mov') ? (
+                                                        <video src={url} className="w-full h-full object-cover" controls />
+                                                    ) : (
+                                                        <img src={url} alt={`Review media ${idx + 1}`} className="w-full h-full object-cover" />
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {rev.admin_reply && (
+                                        <div className="mt-4 bg-zinc-900/80 border border-zinc-800/50 rounded-lg p-4 relative ml-4">
+                                            <div className="flex justify-between items-center mb-1">
+                                                <span className="text-xs font-semibold text-emerald-500">Balasan dari Management</span>
+                                                {rev.admin_reply_at && (
+                                                    <span className="text-[10px] text-zinc-500">
+                                                        {formatDistanceToNowStrict(new Date(rev.admin_reply_at), { addSuffix: true, locale: idLocale })}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p className="text-zinc-300 text-sm leading-relaxed">
+                                                {rev.admin_reply}
+                                            </p>
+                                        </div>
+                                    )}
 
                                     <div className="flex items-center gap-6 mt-5">
                                         <button className="flex items-center gap-2 text-sm text-zinc-500 hover:text-emerald-400 transition-colors hover:bg-zinc-900 px-3 py-1.5 -ml-3 rounded-full">

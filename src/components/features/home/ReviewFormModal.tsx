@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Star, Loader2 } from "lucide-react";
+import { Star, Loader2, ImagePlus, X } from "lucide-react";
 import { toast } from "sonner";
 import { submitReview } from "@/components/features/home/actions";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 
 interface ReviewFormModalProps {
     isOpen: boolean;
@@ -19,8 +20,28 @@ export function ReviewFormModal({ isOpen, onClose, userFullName }: ReviewFormMod
     const [rating, setRating] = useState<number>(0);
     const [hoveredRating, setHoveredRating] = useState<number>(0);
     const [content, setContent] = useState("");
+    const [attachments, setAttachments] = useState<File[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState("");
     const router = useRouter();
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const newFiles = Array.from(e.target.files);
+            const validFiles = newFiles.filter(file => {
+                const isImageOrVideo = file.type.startsWith('image/') || file.type.startsWith('video/');
+                const isUnder10MB = file.size <= 10 * 1024 * 1024;
+                if (!isImageOrVideo) toast.error(`${file.name} bukan format media yang valid.`);
+                if (!isUnder10MB) toast.error(`${file.name} melebihi batas 10MB.`);
+                return isImageOrVideo && isUnder10MB;
+            });
+            setAttachments(prev => [...prev, ...validFiles].slice(0, 5)); // Max 5 files
+        }
+    };
+
+    const removeAttachment = (indexToRemove: number) => {
+        setAttachments(prev => prev.filter((_, index) => index !== indexToRemove));
+    };
 
     const handleSubmit = async () => {
         if (rating === 0) {
@@ -34,13 +55,48 @@ export function ReviewFormModal({ isOpen, onClose, userFullName }: ReviewFormMod
 
         setIsSubmitting(true);
         try {
-            const result = await submitReview(rating, content);
+            const supabase = createClient();
+            const mediaUrls: string[] = [];
+
+            // 1. Upload Attachments
+            if (attachments.length > 0) {
+                for (let i = 0; i < attachments.length; i++) {
+                    const file = attachments[i];
+                    setUploadProgress(`Mengunggah media ${i + 1} dari ${attachments.length}...`);
+
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+                    const filePath = `reviews/${fileName}`;
+
+                    const { error: uploadError } = await supabase.storage
+                        .from('web-assets')
+                        .upload(filePath, file);
+
+                    if (uploadError) {
+                        toast.error(`Gagal mengunggah ${file.name}`);
+                        continue;
+                    }
+
+                    const { data: publicUrlData } = supabase.storage
+                        .from('web-assets')
+                        .getPublicUrl(filePath);
+
+                    if (publicUrlData) {
+                        mediaUrls.push(publicUrlData.publicUrl);
+                    }
+                }
+            }
+            setUploadProgress("");
+
+            // 2. Submit Review Form
+            const result = await submitReview(rating, content, mediaUrls);
             if (result.error) {
                 toast.error(result.error);
             } else {
                 toast.success("Terima kasih! Ulasan Anda telah diposting.");
                 setContent("");
                 setRating(0);
+                setAttachments([]);
                 onClose();
                 router.refresh();
             }
@@ -98,11 +154,59 @@ export function ReviewFormModal({ isOpen, onClose, userFullName }: ReviewFormMod
 
                     <Textarea
                         placeholder="Bagikan detail pengalaman Anda di tempat ini..."
-                        className="min-h-[150px] bg-zinc-900 border-zinc-800 focus-visible:ring-emerald-500 text-base resize-none"
+                        className="min-h-[120px] bg-zinc-900 border-zinc-800 focus-visible:ring-emerald-500 text-base resize-none"
                         value={content}
                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
                         disabled={isSubmitting}
                     />
+
+                    {/* Media Attachments */}
+                    <div className="space-y-3">
+                        {attachments.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                                {attachments.map((file, idx) => (
+                                    <div key={idx} className="relative w-16 h-16 rounded-lg bg-zinc-800 border border-zinc-700 overflow-hidden group">
+                                        {file.type.startsWith('image/') ? (
+                                            <img src={URL.createObjectURL(file)} alt="" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-[10px] text-zinc-400 font-medium">VIDEO</div>
+                                        )}
+                                        {!isSubmitting && (
+                                            <button
+                                                onClick={() => removeAttachment(idx)}
+                                                className="absolute top-1 right-1 w-5 h-5 bg-black/60 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {!isSubmitting && attachments.length < 5 && (
+                            <div className="flex items-center">
+                                <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-full text-sm font-medium text-zinc-300 transition-colors">
+                                    <ImagePlus className="w-4 h-4 text-emerald-500" />
+                                    Tambahkan Foto / Video
+                                    <input
+                                        type="file"
+                                        multiple
+                                        accept="image/*,video/mp4,video/quicktime"
+                                        className="hidden"
+                                        onChange={handleFileChange}
+                                        disabled={isSubmitting}
+                                    />
+                                </label>
+                                <span className="ml-3 text-xs text-zinc-500">{attachments.length}/5 (Maks. 10MB/file)</span>
+                            </div>
+                        )}
+                        {uploadProgress && (
+                            <p className="text-sm text-emerald-500 font-medium animate-pulse">
+                                {uploadProgress}
+                            </p>
+                        )}
+                    </div>
 
                     <div className="flex justify-end gap-3 pt-2">
                         <Button

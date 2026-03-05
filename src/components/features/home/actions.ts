@@ -3,7 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function submitReview(rating: number, content: string) {
+export async function submitReview(rating: number, content: string, mediaUrls: string[] = []) {
     const supabase = await createClient();
 
     const { data: { user } } = await supabase.auth.getUser();
@@ -24,7 +24,8 @@ export async function submitReview(rating: number, content: string) {
         .insert({
             user_id: user.id,
             rating,
-            content
+            content,
+            media_urls: mediaUrls
         });
 
     if (error) {

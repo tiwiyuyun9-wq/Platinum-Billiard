@@ -19,6 +19,9 @@ export default async function Home() {
           rating, 
           content,
           created_at, 
+          admin_reply,
+          admin_reply_at,
+          media_urls,
           profiles (full_name, role)
       `)
     .order("created_at", { ascending: false })

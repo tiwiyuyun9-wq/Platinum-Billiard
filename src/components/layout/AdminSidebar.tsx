@@ -11,7 +11,8 @@ import {
     LogOut,
     Users,
     Settings,
-    Crown
+    Crown,
+    MessageSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
@@ -51,6 +52,11 @@ const sidebarItems = [
         title: "Pengaturan",
         href: "/admin/settings",
         icon: Settings,
+    },
+    {
+        title: "Ulasan",
+        href: "/admin/reviews",
+        icon: MessageSquare,
     },
 ];
 
