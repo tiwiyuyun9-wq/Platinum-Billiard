@@ -33,6 +33,7 @@ export function MembershipPaymentModal({ isOpen, onClose, tier, price, user }: M
             setError(null);
             fetchQris();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen]);
 
     const fetchQris = async () => {

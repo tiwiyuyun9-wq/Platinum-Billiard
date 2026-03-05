@@ -28,7 +28,7 @@ export function DowngradeConfirmationModal({ isOpen, onClose }: DowngradeConfirm
                 router.refresh(); // Refresh page to reflect new status
                 onClose();
             }
-        } catch (error) {
+        } catch {
             toast.error("Terjadi kesalahan sistem saat memproses downgrade.");
         } finally {
             setIsLoading(false);

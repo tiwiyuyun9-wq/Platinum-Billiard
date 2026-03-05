@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { Check, X, Eye, ExternalLink, Calendar, Loader2, Users, Crown, Medal, Search } from "lucide-react";
+import { Check, X, Eye, ExternalLink, Loader2, Users, Crown, Medal, Search } from "lucide-react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { toast } from "sonner";
@@ -47,7 +47,7 @@ export default function MembershipsClient({ pendingMemberships, activeMembership
             } else {
                 toast.success("Membership berhasil disetujui!");
             }
-        } catch (error) {
+        } catch {
             toast.error("Terjadi kesalahan.");
         } finally {
             setIsActionLoading(null);
@@ -64,7 +64,7 @@ export default function MembershipsClient({ pendingMemberships, activeMembership
             } else {
                 toast.success("Membership ditolak.");
             }
-        } catch (error) {
+        } catch {
             toast.error("Terjadi kesalahan.");
         } finally {
             setIsRejectLoading(null);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Star, Loader2 } from "lucide-react";
@@ -44,7 +44,7 @@ export function ReviewFormModal({ isOpen, onClose, userFullName }: ReviewFormMod
                 onClose();
                 router.refresh();
             }
-        } catch (error) {
+        } catch {
             toast.error("Terjadi kesalahan sistem saat mengirim ulasan.");
         } finally {
             setIsSubmitting(false);
