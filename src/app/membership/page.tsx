@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import { MembershipCard } from "@/components/features/membership/MembershipCard";
+import { MembershipPlansClient } from "@/components/features/membership/MembershipPlansClient";
 import { Crown, Star, Shield } from "lucide-react";
 
 const MEMBERSHIP_TIERS = [
@@ -77,11 +77,6 @@ export default async function MembershipPage() {
     // but db might be empty if we didn't insert it. Let's treat null as Standard for UI)
     const currentTierName = activeMembership?.tier || (user ? "standard" : null);
 
-    const handleBuyLink = (tier: string) => {
-        const message = `Halo Admin Platinum, saya tertarik join membership tier ${tier}.`;
-        return `https://wa.me/6285257487828?text=${encodeURIComponent(message)}`;
-    };
-
     return (
         <main className="min-h-screen bg-zinc-950 text-zinc-50 pt-40 pb-20">
             <div className="container mx-auto px-4">
@@ -136,39 +131,18 @@ export default async function MembershipPage() {
                 )}
 
                 {/* Available Plans Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-                    {MEMBERSHIP_TIERS.map((tier) => {
-                        const isCurrentPlan = tier.tier.toLowerCase() === currentTierName;
-                        return (
-                            <div key={tier.tier} className={`relative flex flex-col h-full ${isCurrentPlan ? 'opacity-100 ring-2 ring-emerald-500 rounded-2xl' : 'opacity-100'}`}>
-                                {isCurrentPlan && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full z-20 shadow-lg">
-                                        PLAN SAAT INI
-                                    </div>
-                                )}
-                                <div className={isCurrentPlan ? "pointer-events-none" : ""}>
-                                    <MembershipCard
-                                        tier={tier.tier}
-                                        price={tier.price}
-                                        period={tier.period}
-                                        benefits={[...tier.benefits]}
-                                        recommended={tier.recommended}
-                                        disabled={isCurrentPlan}
-                                        ctaText={isCurrentPlan ? "Plan Saat Ini" : `Join ${tier.tier}`}
-                                        buyLink={!isCurrentPlan ? handleBuyLink(tier.tier) : undefined}
-                                    />
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
+                <MembershipPlansClient
+                    user={user}
+                    currentTierName={currentTierName}
+                    membershipTiers={MEMBERSHIP_TIERS}
+                />
 
                 <div className="mt-20 text-center">
                     <p className="text-zinc-500 text-sm">
                         *Syarat dan ketentuan berlaku. Keanggotaan dapat dibatalkan kapan saja.
                     </p>
                 </div>
-            </div>
-        </main>
+            </div >
+        </main >
     );
 }

@@ -10,7 +10,8 @@ import {
     BarChart3,
     LogOut,
     Users,
-    Settings
+    Settings,
+    Crown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
@@ -37,8 +38,14 @@ const sidebarItems = [
         icon: BarChart3,
     },
     {
+        title: "Pengguna",
         href: "/admin/users",
         icon: Users,
+    },
+    {
+        title: "Membership",
+        href: "/admin/memberships",
+        icon: Crown,
     },
     {
         title: "Pengaturan",
