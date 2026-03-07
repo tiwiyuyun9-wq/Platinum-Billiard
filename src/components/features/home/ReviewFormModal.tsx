@@ -167,6 +167,7 @@ export function ReviewFormModal({ isOpen, onClose, userFullName }: ReviewFormMod
                                 {attachments.map((file, idx) => (
                                     <div key={idx} className="relative w-16 h-16 rounded-lg bg-zinc-800 border border-zinc-700 overflow-hidden group">
                                         {file.type.startsWith('image/') ? (
+                                            // eslint-disable-next-line @next/next/no-img-element
                                             <img src={URL.createObjectURL(file)} alt="" className="w-full h-full object-cover" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-[10px] text-zinc-400 font-medium">VIDEO</div>
