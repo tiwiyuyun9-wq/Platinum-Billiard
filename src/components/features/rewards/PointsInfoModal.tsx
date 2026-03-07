@@ -9,9 +9,20 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { ArrowDownLeft, Clock, Info } from "lucide-react";
+import { ArrowDownLeft, Clock, Info, Coffee, ShoppingBag, Gift } from "lucide-react";
 
-export function PointsInfoModal() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function PointsInfoModal({ methods = [] }: { methods?: any[] }) {
+
+    const renderIcon = (iconName: string) => {
+        switch (iconName) {
+            case 'Clock': return <Clock className="w-6 h-6 text-emerald-500" />;
+            case 'Coffee': return <Coffee className="w-6 h-6 text-emerald-500" />;
+            case 'ShoppingBag': return <ShoppingBag className="w-6 h-6 text-emerald-500" />;
+            default: return <Gift className="w-6 h-6 text-emerald-500" />;
+        }
+    };
+
     return (
         <Dialog modal={false}>
             <DialogTrigger asChild>
@@ -31,18 +42,24 @@ export function PointsInfoModal() {
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="space-y-4 py-4">
-                    <div className="flex items-center gap-4 p-4 rounded-xl bg-zinc-950 border border-zinc-800/50">
-                        <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                            <Clock className="w-6 h-6 text-emerald-500" />
-                        </div>
-                        <div>
-                            <h4 className="font-bold text-white text-lg">Main Billiard</h4>
-                            <p className="text-zinc-400 text-sm">
-                                Dapatkan <span className="text-amber-400 font-bold">10 Poin</span> setiap 1 Jam bermain.
-                            </p>
-                        </div>
-                    </div>
+                <div className="space-y-4 py-4 max-h-[60vh] overflow-y-auto pr-2">
+                    {methods.length === 0 ? (
+                        <p className="text-zinc-500 text-center">Belum ada informasi cara mendapatkan poin.</p>
+                    ) : (
+                        methods.map((method) => (
+                            <div key={method.id} className="flex items-center gap-4 p-4 rounded-xl bg-zinc-950 border border-zinc-800/50">
+                                <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center shrink-0 justify-center border border-emerald-500/20">
+                                    {renderIcon(method.icon)}
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-white text-lg">{method.title}</h4>
+                                    <p className="text-zinc-400 text-sm whitespace-pre-wrap">
+                                        {method.description}
+                                    </p>
+                                </div>
+                            </div>
+                        ))
+                    )}
 
                     <div className="text-sm text-center text-zinc-500 bg-zinc-950/30 p-3 rounded-lg border border-zinc-800/30">
                         *Poin akan masuk otomatis setelah booking selesai (status Completed).

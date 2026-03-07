@@ -60,9 +60,14 @@ export default async function RewardsPage() {
     const { data: history } = await supabase
         .from("point_history")
         .select("*")
-        .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(5);
+
+    // Fetch Earning Methods
+    const { data: earningMethods } = await supabase
+        .from("point_earning_methods")
+        .select("*")
+        .order("created_at", { ascending: true });
 
     return (
         <div className="min-h-screen bg-zinc-950 pt-40 pb-12">
@@ -90,7 +95,7 @@ export default async function RewardsPage() {
                             </h2>
                         </div>
                         <div className="flex gap-3">
-                            <PointsInfoModal />
+                            <PointsInfoModal methods={earningMethods || []} />
                         </div>
                     </div>
                 </div>

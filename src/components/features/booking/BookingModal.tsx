@@ -14,6 +14,7 @@ import { CalendarIcon, Clock, CheckCircle, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 interface BookingModalProps {
     isOpen: boolean;
@@ -34,6 +35,7 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
     const [proofFile, setProofFile] = useState<File | null>(null);
     const [proofPreview, setProofPreview] = useState<string | null>(null);
     const supabase = createClient();
+    const router = useRouter();
 
     if (!table) return null;
 
@@ -46,6 +48,11 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
         setError(null);
         setBookingId(null);
         onClose();
+    }
+
+    const handleSuccessClose = () => {
+        handleClose();
+        router.push('/profile?tab=history');
     }
 
     async function handleSubmit(e: React.FormEvent) {
@@ -332,8 +339,8 @@ export function BookingModal({ isOpen, onClose, table }: BookingModalProps) {
                         <p className="text-zinc-400">
                             Kami sedang memverifikasi pembayaran Anda. Status booking dapat dilihat di dashboard.
                         </p>
-                        <Button onClick={handleClose} variant="outline" className="mt-6 border-zinc-700 text-zinc-300 hover:text-white hover:bg-zinc-800">
-                            Tutup
+                        <Button onClick={handleSuccessClose} variant="outline" className="mt-6 border-zinc-700 text-zinc-300 hover:text-white hover:bg-zinc-800">
+                            Ke Riwayat Booking
                         </Button>
                     </div>
                 )}

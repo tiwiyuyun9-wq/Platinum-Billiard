@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, Clock, CreditCard, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { ProfileForm } from "@/components/features/profile/ProfileForm";
+import { BookingHistoryClient } from "@/components/features/profile/BookingHistoryClient";
 
 export default async function ProfilePage({ searchParams }: { searchParams: { tab?: string } }) {
     const supabase = await createClient();
@@ -34,7 +35,7 @@ export default async function ProfilePage({ searchParams }: { searchParams: { ta
     // Fetch Bookings
     const { data: bookings } = await supabase
         .from("bookings")
-        .select("*")
+        .select("*, tables(name)")
         .eq("user_id", user.id)
         .order("start_time", { ascending: false });
 
@@ -44,6 +45,14 @@ export default async function ProfilePage({ searchParams }: { searchParams: { ta
         gold: "bg-amber-400 text-amber-950 border-amber-500",
         platinum: "bg-zinc-100 text-zinc-950 border-white shadow-[0_0_10px_rgba(255,255,255,0.4)]",
     };
+
+    // Fetch QRIS Settings
+    const { data: settings } = await supabase
+        .from("settings")
+        .select("qris_image_url")
+        .eq("id", 1)
+        .single();
+
 
     return (
         <div className="min-h-screen bg-zinc-950 pt-40 pb-12">
@@ -104,72 +113,7 @@ export default async function ProfilePage({ searchParams }: { searchParams: { ta
 
                     {/* Booking History Tab */}
                     <TabsContent value="history" className="space-y-6">
-                        <div className="grid gap-4">
-                            {bookings && bookings.length > 0 ? (
-                                bookings.map((booking) => (
-                                    <Card key={booking.id} className="bg-zinc-900/50 border-zinc-800 hover:border-zinc-700 transition-colors overflow-hidden group">
-                                        <div className="flex flex-col sm:flex-row sm:items-center p-6 gap-6">
-                                            {/* Date Box */}
-                                            <div className="flex-shrink-0 flex flex-col items-center justify-center bg-zinc-950 rounded-xl w-16 h-16 border border-zinc-800 shadow-inner">
-                                                <span className="text-xs text-zinc-500 uppercase font-bold">DATE</span>
-                                                <span className="text-xl font-bold text-white">
-                                                    {new Date(booking.start_time).getDate()}
-                                                </span>
-                                            </div>
-
-                                            {/* Details */}
-                                            <div className="flex-grow space-y-1">
-                                                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                                                    Meja {booking.table_id}
-                                                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${booking.status === 'confirmed' ? "bg-emerald-950/30 text-emerald-400 border-emerald-900/50" :
-                                                        booking.status === 'pending_payment' ? "bg-amber-950/30 text-amber-400 border-amber-900/50" :
-                                                            "bg-zinc-800 text-zinc-400 border-zinc-700"
-                                                        }`}>
-                                                        {booking.status?.replace('_', ' ')}
-                                                    </span>
-                                                </h3>
-                                                <div className="flex items-center text-zinc-400 text-sm gap-4">
-                                                    <span className="flex items-center gap-1.5">
-                                                        <Clock className="w-3.5 h-3.5" />
-                                                        {new Date(booking.start_time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} - {new Date(booking.end_time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
-                                                    </span>
-                                                    <span className="flex items-center gap-1.5">
-                                                        <Calendar className="w-3.5 h-3.5" />
-                                                        {new Date(booking.start_time).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            {/* Price & Action */}
-                                            <div className="flex flex-col items-end gap-2">
-                                                <span className="text-lg font-bold text-emerald-400">
-                                                    Rp {booking.total_price?.toLocaleString('id-ID')}
-                                                </span>
-                                                {booking.status === 'pending_payment' && (
-                                                    <Button size="sm" variant="secondary" className="h-8 text-xs">
-                                                        Bayar Sekarang
-                                                    </Button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </Card>
-                                ))
-                            ) : (
-                                <div className="text-center py-16 bg-zinc-900/30 rounded-2xl border border-zinc-800/50 border-dashed">
-                                    <div className="w-16 h-16 bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-4 border border-zinc-800">
-                                        <Calendar className="w-8 h-8 text-zinc-600" />
-                                    </div>
-                                    <div className="text-center p-8 border border-dashed border-zinc-800 rounded-xl space-y-3">
-                                        <p className="text-zinc-500 text-sm max-w-sm mx-auto">
-                                            Anda belum pernah melakukan booking meja. Yuk, booking meja sekarang dan nikmati permainannya!
-                                        </p>
-                                        <Button asChild className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-full">
-                                            <Link href="/booking">Booking Meja</Link>
-                                        </Button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                        <BookingHistoryClient bookings={bookings || []} qrisUrl={settings?.qris_image_url || null} />
                     </TabsContent>
                     {/* Settings Tab */}
                     <TabsContent value="settings">

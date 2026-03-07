@@ -28,3 +28,42 @@ export async function updateProfile(formData: FormData) {
     revalidatePath('/profile')
     return { success: true }
 }
+
+export async function cancelBooking(bookingId: string) {
+    const supabase = await createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        return { error: "Anda harus login untuk membatalkan booking." };
+    }
+
+    // Verify booking belongs to user and is pending or waiting
+    const { data: booking, error: fetchError } = await supabase
+        .from('bookings')
+        .select('id, status')
+        .eq('id', bookingId)
+        .eq('user_id', user.id)
+        .single();
+
+    if (fetchError || !booking) {
+        return { error: "Booking tidak ditemukan." };
+    }
+
+    if (booking.status !== 'pending_payment' && booking.status !== 'waiting_confirmation') {
+        return { error: "Hanya booking yang belum dikonfirmasi yang dapat dibatalkan." };
+    }
+
+    const { error: updateError } = await supabase
+        .from('bookings')
+        .update({ status: 'cancelled' })
+        .eq('id', bookingId);
+
+    if (updateError) {
+        console.error("Error cancelling booking:", updateError);
+        return { error: "Gagal membatalkan booking." };
+    }
+
+    revalidatePath('/profile');
+    revalidatePath('/admin/tables'); // So tables show available again
+    return { success: true };
+}
