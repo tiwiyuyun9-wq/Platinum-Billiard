@@ -3,9 +3,9 @@ import { redirect } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+// Removed Card import as it is unused
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Clock, CreditCard, LogOut, Settings } from "lucide-react";
+import { Clock, CreditCard, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { ProfileForm } from "@/components/features/profile/ProfileForm";
 import { BookingHistoryClient } from "@/components/features/profile/BookingHistoryClient";

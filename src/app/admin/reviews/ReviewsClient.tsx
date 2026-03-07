@@ -24,6 +24,7 @@ export default function ReviewsClient({ initialReviews }: { initialReviews: any[
     // Delete Loading State
     const [deletingId, setDeletingId] = useState<string | null>(null);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const openReplyModal = (review: any) => {
         setSelectedReview(review);
         setReplyContent(review.admin_reply || "");
@@ -122,6 +123,7 @@ export default function ReviewsClient({ initialReviews }: { initialReviews: any[
                                                         {url.includes('.mp4') || url.includes('.webm') || url.includes('.mov') ? (
                                                             <video src={url} className="w-full h-full object-cover pointer-events-none" />
                                                         ) : (
+                                                            // eslint-disable-next-line @next/next/no-img-element
                                                             <img src={url} alt="Review attachment" className="w-full h-full object-cover" />
                                                         )}
                                                     </div>

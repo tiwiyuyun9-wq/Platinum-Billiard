@@ -207,9 +207,10 @@ export function TestimonialSection({ reviews = [], user = null }: TestimonialSec
                                             {rev.media_urls.map((url, idx) => (
                                                 <div key={idx} className="relative w-24 h-24 rounded-lg bg-zinc-800 border border-zinc-700/50 overflow-hidden shrink-0">
                                                     {url.includes('.mp4') || url.includes('.webm') || url.includes('.mov') ? (
-                                                        <video src={url} className="w-full h-full object-cover" controls />
+                                                        <video src={url} className="w-full h-full object-cover pointer-events-none" />
                                                     ) : (
-                                                        <img src={url} alt={`Review media ${idx + 1}`} className="w-full h-full object-cover" />
+                                                        // eslint-disable-next-line @next/next/no-img-element
+                                                        <img src={url} alt="Review media" className="w-full h-full object-cover" />
                                                     )}
                                                 </div>
                                             ))}

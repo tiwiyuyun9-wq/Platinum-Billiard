@@ -284,9 +284,12 @@ export function BookingDetailsModal({ isOpen, onClose, booking, qrisUrl }: { isO
                             {booking.status === 'waiting_confirmation' && booking.payment_proof_url && (
                                 <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
                                     <h4 className="text-sm font-medium text-zinc-400 mb-3">Bukti Transfer Anda</h4>
-                                    <div className="relative aspect-auto max-h-[300px] w-full rounded-lg overflow-hidden border border-zinc-800">
-                                        <img src={booking.payment_proof_url} alt="Payment Proof" className="w-full h-full object-contain" />
-                                    </div>
+                                    {booking.payment_proof_url.includes('.mp4') || booking.payment_proof_url.includes('.webm') ? (
+                                        <video src={booking.payment_proof_url} controls className="w-full rounded-xl border border-zinc-800" />
+                                    ) : (
+                                        // eslint-disable-next-line @next/next/no-img-element
+                                        <img src={booking.payment_proof_url} alt="Bukti Pembayaran" className="w-full rounded-xl border border-zinc-800" />
+                                    )}
                                 </div>
                             )}
                         </div>

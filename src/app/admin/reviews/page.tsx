@@ -23,7 +23,7 @@ export default async function AdminReviewsPage() {
     }
 
     // Fetch all reviews, ordered by latest
-    const { data: reviews, error: reviewsError } = await supabase
+    const { data: reviews } = await supabase
         .from("reviews")
         .select(`
             *,
